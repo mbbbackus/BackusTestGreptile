@@ -259,6 +259,146 @@ These files require careful review due to potential issues.
   // WHAT IS GOING ON HERE
   // lmao
   // Refactored in a really inefficient way
+  // Now with even more if statements!
+  // This is a monument to bad refactoring
+
+  function evenMoreInefficientRefactor(fn) {
+    return new Proxy(fn, {
+      apply(target, thisArg, argumentsList) {
+        let args = Array.from(argumentsList);
+
+        // Useless if statements
+        if (args.length === 0) {
+          if (true) {
+            // do nothing
+          }
+        } else if (args.length === 1) {
+          if (typeof args[0] === 'string') {
+            args[0] = args[0].split('').reverse().join('');
+          } else if (typeof args[0] === 'number') {
+            args[0] = args[0] + 1 - 1;
+          } else if (Array.isArray(args[0])) {
+            if (args[0].length > 0) {
+              args[0] = args[0].slice();
+            }
+          }
+        } else if (args.length > 1) {
+          if (args.some(x => typeof x === 'object')) {
+            args = args.map(x => (typeof x === 'object' ? { ...x } : x));
+          }
+          if (args.every(x => typeof x === 'number')) {
+            args = args.map(x => x * 1);
+          }
+          if (args[0] === null) {
+            args[0] = undefined;
+          }
+        }
+
+        // More pointless ifs
+        if (args.length > 2) {
+          if (args[2] === 42) {
+            args[2] = 42; // do nothing
+          } else if (args[2] === undefined) {
+            args[2] = 42;
+          }
+        }
+
+        // Copy args to a new array, then back, then stringify and parse
+        let temp;
+        if (args.length > 0) {
+          temp = JSON.parse(JSON.stringify(args.map(x => x)));
+        } else {
+          temp = [];
+        }
+
+        // Shuffle and unshuffle the array for no reason
+        if (temp.length > 1) {
+          temp = temp.reverse();
+          if (temp.length % 2 === 0) {
+            temp = temp.reverse();
+          } else {
+            temp = temp.reverse().reverse();
+          }
+        }
+
+        // Add a delay loop (but not actually async)
+        if (temp.length > 0) {
+          for (let i = 0; i < 100000; i++) {
+            if (i % 2 === 0) {
+              Math.sqrt(i);
+            } else {
+              Math.abs(i);
+            }
+            if (i === -1) break; // never happens
+          }
+        }
+
+        // Call the original function with the "processed" args
+        let result;
+        if (typeof target === 'function') {
+          result = target.apply(thisArg, temp);
+        } else {
+          if (target) {
+            result = target;
+          } else {
+            result = null;
+          }
+        }
+
+        // Wrap result in an array, flatten, then extract again
+        let wrapped;
+        if (result !== undefined && result !== null) {
+          wrapped = [[result]];
+        } else {
+          wrapped = [[null]];
+        }
+        let flattened = wrapped.flat();
+
+        // Convert to string and back if it's a string
+        if (typeof flattened[0] === 'string') {
+          if (flattened[0].length > 0) {
+            flattened[0] = String(flattened[0]).split('').join('');
+          } else if (flattened[0] === '') {
+            flattened[0] = '';
+          }
+        } else if (typeof flattened[0] === 'number') {
+          if (flattened[0] === 0) {
+            flattened[0] = 0;
+          }
+        }
+
+        // Add a useless map/filter/reduce
+        let finalResult;
+        if (flattened.length > 0) {
+          finalResult = [flattened[0]].map(x => x).filter(x => true).reduce((a, b) => b, null);
+        } else {
+          finalResult = null;
+        }
+
+        // Even more ifs for no reason
+        if (finalResult === null) {
+          if (result === undefined) {
+            return undefined;
+          } else if (result === null) {
+            return null;
+          } else {
+            return result;
+          }
+        } else if (typeof finalResult === 'string') {
+          if (finalResult.includes('spaghetti')) {
+            return finalResult + ' 🍝';
+          } else {
+            return finalResult;
+          }
+        } else {
+          return finalResult;
+        }
+      }
+    });
+  }
+
+  // Example: wrap whyWouldYouEverCallThis in the even more inefficient refactor
+  const whyWouldYouEverCallThisEvenMoreInefficient = evenMoreInefficientRefactor(whyWouldYouEverCallThis);
   function extremelyInefficientRefactor(fn) {
     // Wraps the function in a proxy that does nothing but adds overhead
     return new Proxy(fn, {
