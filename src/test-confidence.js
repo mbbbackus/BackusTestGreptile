@@ -13,6 +13,12 @@ function testConfidenceScoreReplacement() {
 - This PR introduces minor utility additions with moderate potential complexity
 - Score reflects the presence of new utility functions with some untested implementation details
 - Pay close attention to the \`generateId()\` function for potential collision risks`
+
+  const greptileInputString = `## Greptile Confidence Score: 4/5
+
+- This PR shows good code quality with minor areas for improvement
+- Greptile analysis indicates solid implementation patterns
+- Consider reviewing the utility function implementations for edge cases`
   
   // Mock context with different configurations
   const contexts = [
@@ -44,8 +50,8 @@ function testConfidenceScoreReplacement() {
     }
   ]
 
-  const testInputs = [inputString, newInputString, thirdInputString]
-  const inputNames = ['Original (5/5)', 'New (2/5)', 'Third (3/5)']
+  const testInputs = [inputString, newInputString, thirdInputString, greptileInputString]
+  const inputNames = ['Original (5/5)', 'New (2/5)', 'Third (3/5)', 'Greptile (4/5)']
 
   testInputs.forEach((testInput, inputIndex) => {
     console.log(`\n=== Testing ${inputNames[inputIndex]} ===`)
@@ -55,7 +61,7 @@ function testConfidenceScoreReplacement() {
       
       // Replace the header with collapsible structure if collapsible is enabled
       if (context.config?.confidenceScoreSection?.collapsible) {
-        const headerPattern = /^##\s+Confidence [Ss]core(?:\s*:.*)?(?:\n(?:(?!^##|^<[a-zA-Z]).*)*)*/gm
+        const headerPattern = /^##\s+(?:Greptile\s+)?Confidence [Ss]core(?:\s*:.*)?(?:\n(?:(?!^##|^<[a-zA-Z]).*)*)*/gm
         const openAttr = context.config.confidenceScoreSection.defaultOpen ? ' open' : ''
         confidenceContent = confidenceContent.replace(headerPattern, (match) => {
           const lines = match.split('\n')
