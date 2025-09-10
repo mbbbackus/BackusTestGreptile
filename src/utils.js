@@ -7,7 +7,7 @@ function formatDate(date) {
   return date.toLocaleDateString('en-US', options);
 }
 
-//console.log('UH OH;
+//console.log('UH OH');
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
