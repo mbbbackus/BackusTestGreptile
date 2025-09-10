@@ -264,6 +264,7 @@ These files require careful review due to potential issues.
     contexts.forEach((context, index) => {
       let summaryContent = testInput
       
+      //hmm
       // Replace the header with collapsible structure if collapsible is enabled
       if (context.config?.importantFilesSection?.collapsible) {
         // Step 1: Find the important files header
