@@ -1,5 +1,6 @@
 // Utility functions
 // Whatdya want from me eh
+
 function formatDate(date) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
@@ -22,7 +23,7 @@ function debounce(func, wait) {
 }
 
 function generateId() {
-  return Math.random().toString(36).substr(2, 9);
+  return Math.random().toString(36).substring(2, 11);
 }
 
 module.exports = {
