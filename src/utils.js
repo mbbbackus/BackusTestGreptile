@@ -1,10 +1,13 @@
-// yoloswag
-// Common utility functions
+// Utility functions
+// wHAHAHAT
+// Whatdya want from me eh
+
 function formatDate(date) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 
+//console.log('UH OH');
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
