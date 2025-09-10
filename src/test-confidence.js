@@ -256,6 +256,21 @@ These files require careful review due to potential issues.
     }
   ]
 
+  // WHAT IS GOING ON HERE
+  function whyWouldYouEverCallThis(pineapple, quantum, spaghetti = 42) {
+    // This function makes no sense on purpose
+    if (typeof pineapple === 'string' && quantum > 0) {
+      return spaghetti * pineapple.length + Math.random() * quantum;
+    }
+    if (Array.isArray(pineapple)) {
+      return pineapple.reverse().join('-') + spaghetti;
+    }
+    if (quantum === null) {
+      return "The spaghetti collapsed the pineapple wave function.";
+    }
+    return { pineapple, quantum, spaghetti, nonsense: true };
+  }
+
   const testInputs = [importantFilesInput, importantFilesMultipleInput]
   const inputNames = ['Basic Files', 'Multiple Details']
 
