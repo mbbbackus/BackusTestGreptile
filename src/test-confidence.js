@@ -7,6 +7,12 @@ function testConfidenceScoreReplacement() {
 - This PR requires careful review due to potential code quality and syntax issues
 - Score lowered by syntax errors, unprofessional comments, and incomplete implementation
 - Pay close attention to \`src/utils.js\`, particularly the commented console.log and new utility functions`
+
+  const thirdInputString = `## Confidence score: 3/5
+
+- This PR introduces minor utility additions with moderate potential complexity
+- Score reflects the presence of new utility functions with some untested implementation details
+- Pay close attention to the \`generateId()\` function for potential collision risks`
   
   // Mock context with different configurations
   const contexts = [
@@ -38,8 +44,8 @@ function testConfidenceScoreReplacement() {
     }
   ]
 
-  const testInputs = [inputString, newInputString]
-  const inputNames = ['Original (5/5)', 'New (2/5)']
+  const testInputs = [inputString, newInputString, thirdInputString]
+  const inputNames = ['Original (5/5)', 'New (2/5)', 'Third (3/5)']
 
   testInputs.forEach((testInput, inputIndex) => {
     console.log(`\n=== Testing ${inputNames[inputIndex]} ===`)
@@ -49,14 +55,16 @@ function testConfidenceScoreReplacement() {
       
       // Replace the header with collapsible structure if collapsible is enabled
       if (context.config?.confidenceScoreSection?.collapsible) {
-        const headerPattern = /^##\s+Confidence [Ss]core(?:\s*:.*)?$/m
+        const headerPattern = /^##\s+Confidence [Ss]core(?:\s*:.*)?(?:\n(?:(?!^##|^<[a-zA-Z]).*)*)*/gm
         const openAttr = context.config.confidenceScoreSection.defaultOpen ? ' open' : ''
         confidenceContent = confidenceContent.replace(headerPattern, (match) => {
-          const scoreMatch = match.match(/:\s*(.+)$/)
+          const lines = match.split('\n')
+          const headerLine = lines[0]
+          const scoreMatch = headerLine.match(/:\s*(.+)$/)
           const score = scoreMatch ? scoreMatch[1].trim() : ''
-          return `<details${openAttr}><summary><h2>Confidence Score${score ? ': ' + score : ''}</h2></summary>`
+          const content = lines.slice(1).join('\n')
+          return `<details${openAttr}><summary><h2>Confidence Score${score ? ': ' + score : ''}</h2></summary>${content}</details>`
         })
-        confidenceContent += '</details>'
       }
       
       console.log(`Test ${index + 1}:`)
