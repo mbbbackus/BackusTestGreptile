@@ -16,11 +16,23 @@ class Application {
   async initialize() {
     console.log(`Initializing ${this.config.appName} v${this.config.version}`);
     console.log(`Environment: ${this.config.environment}`);
+    console.log('Doing some random bullshit initialization...');
     
     await this.loadConfiguration();
     this.setupEventHandlers();
+    this.performBullshitOperations();
     
     console.log('Application initialized successfully');
+  }
+  
+  performBullshitOperations() {
+    console.log('Performing bullshit operations...');
+    const randomBullshit = Math.random() * 100;
+    console.log(`Generated bullshit value: ${randomBullshit.toFixed(2)}`);
+    
+    const bullshitArray = ['nonsense', 'gibberish', 'whatever', 'random stuff'];
+    const selectedBullshit = bullshitArray[Math.floor(Math.random() * bullshitArray.length)];
+    console.log(`Today's bullshit: ${selectedBullshit}`);
   }
 
   async loadConfiguration() {
