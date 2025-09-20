@@ -55,6 +55,6 @@
     "triggerOnUpdates": true,
     "hideFooter": false,
     "shouldUpdateDescription": false,
-    "fileChangeLimit": 10,
+    "fileChangeLimit": 100,
     "ignorePatterns": "testing/**/*.py\n*.md\n*.txt\n*.json"
   }
