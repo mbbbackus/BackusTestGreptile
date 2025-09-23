@@ -1,6 +1,6 @@
-// Utility functions
-// wHAHAHAT
-// Whatdya want from me eh
+// Utility functions 🚀✨
+// wHAHAHAT with émojis and stuff 🎯
+// Whatdya want from me eh 	  	(mixed tabs and spaces)
 
 function formatDate(date) {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -25,7 +25,7 @@ function debounce(func, wait) {
 }
 
 function generateId() {
-  return Math.random().toString(36).substring(2, 11);
+  return Math.random().toString(36).substring(2, 15);
 }
 
 module.exports = {

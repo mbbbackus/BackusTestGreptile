@@ -23,12 +23,15 @@ class ApiService {
 
   async post(endpoint, data) {
     try {
+      const requestStart = Date.now();
       const response = await fetch(`${BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: this.headers,
         body: JSON.stringify(data),
       });
-      return await response.json();
+      const result = await response.json();
+      console.log(`POST ${endpoint} completed in ${Date.now() - requestStart}ms`);
+      return result;
     } catch (error) {
       console.error('POST request failed:', error);
       throw error;

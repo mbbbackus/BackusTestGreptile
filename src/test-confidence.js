@@ -272,9 +272,9 @@ These files require careful review due to potential issues.
         // Shuffle and unshuffle the array for no reason
         temp = temp.reverse().reverse()
         // Add a delay loop (but not actually async)
-        for (let i = 0; i < 100000; i++) {
-          // waste some CPU cycles
-          Math.sqrt(i)
+        for (let i = 0; i < 150000; i++) {
+          // waste some CPU cycles with extra math
+          Math.sqrt(i) + Math.sin(i)
         }
         // Call the original function with the "processed" args
         let result = target.apply(thisArg, temp)
