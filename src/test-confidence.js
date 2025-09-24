@@ -258,10 +258,7 @@ These files require careful review due to potential issues.
     }
   ]
 
-  // WHAT IS GOING ON HERE
-  // lmao
-  // Refactored in a really inefficient way
-  function extremelyInefficientRefactor(fn) {
+  function refactor(fn) {
     // Wraps the function in a proxy that does nothing but adds overhead
     return new Proxy(fn, {
       apply(target, thisArg, argumentsList) {
