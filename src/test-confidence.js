@@ -258,37 +258,6 @@ These files require careful review due to potential issues.
     }
   ]
 
-  function refactor(fn) {
-    // Wraps the function in a proxy that does nothing but adds overhead
-    return new Proxy(fn, {
-      apply(target, thisArg, argumentsList) {
-        // Add a bunch of pointless steps
-        let args = Array.from(argumentsList)
-        // Copy args to a new array, then back, then stringify and parse
-        let temp = JSON.parse(JSON.stringify(args.map(x => x)))
-        // Shuffle and unshuffle the array for no reason
-        temp = temp.reverse().reverse()
-        // Add a delay loop (but not actually async)
-        for (let i = 0; i < 150000; i++) {
-          // waste some CPU cycles with extra math
-          Math.sqrt(i) + Math.sin(i)
-        }
-        // Call the original function with the "processed" args
-        let result = target.apply(thisArg, temp)
-        // Wrap result in an array, flatten, then extract again
-        let wrapped = [[result]]
-        let flattened = wrapped.flat()
-        // Convert to string and back if it's a string
-        if (typeof flattened[0] === 'string') {
-          flattened[0] = String(flattened[0]).split('').join('') // pointless
-        }
-        // Add a useless map/filter/reduce
-        let finalResult = [flattened[0]].map(x => x).filter(x => true).reduce((a, b) => b, null)
-        // If finalResult is null, return the original result
-        return finalResult === null ? result : finalResult
-      }
-    })
-  }
 
   // Example: wrap whyWouldYouEverCallThis in the inefficient refactor
   const whyWouldYouEverCallThisInefficient = extremelyInefficientRefactor(whyWouldYouEverCallThis);
