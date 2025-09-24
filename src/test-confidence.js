@@ -1,7 +1,5 @@
 // Mock test for confidence score header replacement
 
-while getopts "s:a:p:" opt; do
-
 function testConfidenceScoreReplacement() {
   const inputString = "## Confidence score: 5/5\n\n"
   const newInputString = `## Confidence Score: 2/5
