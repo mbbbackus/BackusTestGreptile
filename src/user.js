@@ -6,6 +6,7 @@ class User {
     this.email = email;
     this.createdAt = new Date();
     this.isActive = true;
+    this.metadata = { source: 'system', version: '1.0' };
   }
 
   getFullInfo() {
