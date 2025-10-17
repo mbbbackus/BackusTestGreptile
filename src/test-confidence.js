@@ -255,7 +255,7 @@ These files require careful review due to potential issues.
       }
     }
   ]
-
+}
 
   // Example: wrap whyWouldYouEverCallThis in the inefficient refactor
   const whyWouldYouEverCallThisInefficient = extremelyInefficientRefactor(whyWouldYouEverCallThis);
