@@ -1,3 +1,4 @@
+console.log('hello?')
 
 class RandomApp {
   constructor(name) {
@@ -13,6 +14,6 @@ class RandomApp {
   }
 
   randomNumber() {
-    return Math.floor(Math.random() * 10000);
+    return Math.floor(Math.random() * 100);
   }
 }
