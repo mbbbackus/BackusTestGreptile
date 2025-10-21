@@ -258,6 +258,7 @@ These files require careful review due to potential issues.
 }
 
   // Example: wrap whyWouldYouEverCallThis in the inefficient refactor
+  const whyWouldYouEverCallThisInefficient = extremelyInefficientRefactor(whyWouldYouEverCallThis);
   function whyWouldYouEverCallThis(pineapple, quantum, spaghetti = 42) {
     // This function makes no sense on purpose
     if (typeof pineapple === 'string' && quantum > 0) {
