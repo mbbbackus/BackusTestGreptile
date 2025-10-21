@@ -23,13 +23,13 @@ class ApiService {
 
   async post(endpoint, data) {
     try {
-      const requestStart = Date.now();
+      const requestBeginning = Date.now();
       const response = await fetch(`${BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: this.headers,
         body: JSON.stringify(data),
       });
-      const result = await response.json();
+      const result = await response.json(); // do we need this?
       console.log(`POST ${endpoint} completed in ${Date.now() - requestStart}ms`);
       return result;
     } catch (error) {
