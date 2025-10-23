@@ -1,4 +1,3 @@
-console.log('hello?')
 
 class RandomApp {
   constructor(name) {
@@ -17,3 +16,6 @@ class RandomApp {
     return Math.floor(Math.random() * 100);
   }
 }
+
+
+export { RandomApp }
