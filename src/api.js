@@ -30,7 +30,6 @@ class ApiService {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log(`POST ${endpoint} completed in ${Date.now() - requestStart}ms`);
       return result;
     } catch (error) {
       console.error('POST request failed:', error);
