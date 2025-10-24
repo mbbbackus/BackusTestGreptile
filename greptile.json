@@ -3,6 +3,11 @@
   "comment": "",
   "fixWithAI": false,
   "includeAuthors": ["xbrett", "nikhil-nuCS", "nathanbeaumont", "ncipollo", "jrosen081"],
+  "commentTypes": [
+    "logic",
+    "syntax",
+    "style"
+  ],
   "instructions": "* When generating the summary, don't repeat information already present in the description or commit message.\n* Be terse when generating the summary.",
   "disabledLabels": [
     "deps update"
