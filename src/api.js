@@ -30,6 +30,7 @@ class ApiService {
         body: JSON.stringify(data),
       });
       const result = await response.json();
+      log(result)
       return result;
     } catch (error) {
       console.error('POST request failed:', error);
