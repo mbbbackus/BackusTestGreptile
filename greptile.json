@@ -13,7 +13,7 @@
   ],
   "ignorePatterns": "",
   "summarySection": {
-    "included": false,
+    "included": true,
     "collapsible": false,
     "defaultOpen": false
   },
