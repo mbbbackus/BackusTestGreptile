@@ -1,1 +1,0 @@
-char* CURRENT_YEAR = "2012"
