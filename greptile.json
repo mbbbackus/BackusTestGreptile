@@ -21,17 +21,17 @@
   "triggerOnUpdates": false,
   "issuesTableSection": {
     "included": true,
-    "collapsible": false,
+    "collapsible": true,
     "defaultOpen": false
   },
   "confidenceScoreSection": {
     "included": true,
-    "collapsible": false,
+    "collapsible": true,
     "defaultOpen": false
   },
   "sequenceDiagramSection": {
     "included": true,
     "collapsible": true,
-    "defaultOpen": false
+    "defaultOpen": true
   }
 }
