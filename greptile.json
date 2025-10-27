@@ -2,7 +2,6 @@
   "labels": [],
   "comment": "",
   "fixWithAI": false,
-  "includeAuthors": ["xbrett", "nikhil-nuCS", "nathanbeaumont"],
   "commentTypes": [
     "logic",
     "syntax",
