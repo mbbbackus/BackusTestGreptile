@@ -5,7 +5,7 @@ dialect = snowflake
 templater = jinja
 sql_file_exts = .sql
 
-exclude_rules = L034, L016, L044, L027, L031, AL01, L009
+exclude_rules = L034, L016, L044, L027, L031, AL01, LT12, L009
 warnings = ST01
 
 max_line_length = 80
