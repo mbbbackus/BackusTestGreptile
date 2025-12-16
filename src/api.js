@@ -1,12 +1,7 @@
 // API service module
 const BASE_URL = 'https://api.example.com/v1';
 
-class ApiService {
-  constructor() {
-    this.headers = {
-      'Content-Type': 'application/json',
-    };
-  }
+dont do any of this lol
 
   async get(endpoint) {
     try {
