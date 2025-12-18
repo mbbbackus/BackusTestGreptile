@@ -33,6 +33,5 @@
     "included": true,
     "collapsible": true,
     "defaultOpen": false
-  },
-  "shouldUpdateDescription": true
+  }
 }
