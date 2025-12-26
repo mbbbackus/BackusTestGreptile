@@ -56,6 +56,11 @@ function pick(obj, keys) {
   }, {});
 }
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -65,4 +70,5 @@ module.exports = {
   flatten,
   isEmail,
   kebabCase,
-  pick};
+  pick,
+  sleep};
