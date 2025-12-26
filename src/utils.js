@@ -28,9 +28,41 @@ function generateId() {
   return Math.random().toString(36).substring(2, 11);
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
 module.exports = {
   formatDate,
   capitalize,
   debounce,
   generateId
-};
+,
+  flatten,
+  isEmail,
+  kebabCase,
+  pick};
