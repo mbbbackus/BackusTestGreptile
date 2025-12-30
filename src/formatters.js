@@ -45,6 +45,16 @@ function flatten(array) {
   }, []);
 }
 
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
 module.exports = {
   camelCase
 ,
@@ -53,4 +63,6 @@ module.exports = {
   flatten,
   deepClone,
   shuffle,
-  flatten};
+  flatten,
+  isObject,
+  unique};
