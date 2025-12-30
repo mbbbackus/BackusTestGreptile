@@ -11,7 +11,21 @@ function omit(obj, keys) {
   return result;
 }
 
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   camelCase
 ,
-  omit};
+  omit,
+  randomInt,
+  flatten};
