@@ -38,6 +38,13 @@ function shuffle(array) {
   return shuffled;
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   camelCase
 ,
@@ -45,4 +52,5 @@ module.exports = {
   randomInt,
   flatten,
   deepClone,
-  shuffle};
+  shuffle,
+  flatten};
