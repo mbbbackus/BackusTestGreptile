@@ -76,6 +76,24 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -88,4 +106,6 @@ module.exports = {
   pick,
   sleep,
   groupBy,
-  unique};
+  unique,
+  merge,
+  deepClone};

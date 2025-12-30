@@ -36,6 +36,23 @@ function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
 module.exports = {
   truncate
 ,
@@ -43,4 +60,6 @@ module.exports = {
   flatten,
   deepClone,
   groupBy,
-  truncate};
+  truncate,
+  truncate,
+  throttle};
