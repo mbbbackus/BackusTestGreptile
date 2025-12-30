@@ -53,6 +53,21 @@ function throttle(func, limit) {
   };
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
 module.exports = {
   truncate
 ,
@@ -62,4 +77,6 @@ module.exports = {
   groupBy,
   truncate,
   truncate,
-  throttle};
+  throttle,
+  isEmail,
+  chunk};

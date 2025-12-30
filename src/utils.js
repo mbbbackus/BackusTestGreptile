@@ -94,6 +94,16 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+
+function camelCase(str) {
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -108,4 +118,6 @@ module.exports = {
   groupBy,
   unique,
   merge,
-  deepClone};
+  deepClone,
+  camelCase,
+  sleep};
