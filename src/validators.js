@@ -75,8 +75,6 @@ module.exports = {
   flatten,
   deepClone,
   groupBy,
-  truncate,
-  truncate,
   throttle,
   isEmail,
   chunk};
