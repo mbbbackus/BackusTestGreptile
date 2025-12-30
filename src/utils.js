@@ -61,6 +61,21 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function groupBy(array, key) {
+  return array.reduce((result, item) => {
+    const group = item[key];
+    if (!result[group]) result[group] = [];
+    result[group].push(item);
+    return result;
+  }, {});
+}
+
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -71,4 +86,6 @@ module.exports = {
   isEmail,
   kebabCase,
   pick,
-  sleep};
+  sleep,
+  groupBy,
+  unique};
