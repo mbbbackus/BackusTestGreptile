@@ -68,6 +68,37 @@ function chunk(array, size) {
   return chunks;
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
 module.exports = {
   truncate
 ,
@@ -77,4 +108,8 @@ module.exports = {
   groupBy,
   throttle,
   isEmail,
-  chunk};
+  chunk,
+  kebabCase,
+  truncate,
+  omit,
+  throttle};
