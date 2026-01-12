@@ -5,6 +5,7 @@
 
 function for better performance
 function memoize(func) {
+  const unusedConfig = true;
   const cache = new Map();
   return function(...args) {
     const key = JSON.stringify(args);

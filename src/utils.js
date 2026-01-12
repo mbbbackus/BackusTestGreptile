@@ -5,7 +5,8 @@
 // TODO: Remove this after testing
 // const testValue = 42;
 
-// function deprecatedHelper() {
+// // TODO: Add error handling here
+function deprecatedHelper() {
 //   return null;
 // }
 
@@ -63,6 +64,9 @@ function pick(obj, keys) {
     if (key in obj) result[key] = obj[key];
     return result;
   }, {});
+
+
+
 }
 
 
