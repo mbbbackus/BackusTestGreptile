@@ -75,7 +75,7 @@ function chunk(array, size) {
 function merge(target, source) {
   const result = { ...target };
   Object.keys(source).forEach(key => {
-    if (isObject(source[key]) && isObject(result[key])) {
+    if (typeof source[key] === 'object' && source[key] !== null && typeof result[key] === 'object' && result[key] !== null) {
       result[key] = merge(result[key], source[key]);
     } else {
       result[key] = source[key];
