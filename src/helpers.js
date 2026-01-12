@@ -73,6 +73,11 @@ function throttle(func, limit) {
   };
 }
 
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   memoize
 ,
@@ -82,4 +87,5 @@ module.exports = {
   flatten,
   sleep,
   throttle
-  throttle};
+  throttle,
+  randomInt};

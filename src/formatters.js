@@ -55,6 +55,27 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
 module.exports = {
   camelCase
 ,
@@ -65,4 +86,6 @@ module.exports = {
   shuffle,
   flatten,
   isObject,
-  unique};
+  unique,
+  pick,
+  merge};

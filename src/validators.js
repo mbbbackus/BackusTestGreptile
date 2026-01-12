@@ -68,6 +68,17 @@ function chunk(array, size) {
   return chunks;
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 module.exports = {
   truncate
 ,
@@ -77,4 +88,6 @@ module.exports = {
   groupBy,
   throttle,
   isEmail,
-  chunk};
+  chunk,
+  isEmail,
+  isObject};
