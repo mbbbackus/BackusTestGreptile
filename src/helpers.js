@@ -106,6 +106,4 @@ module.exports = {
   sleep,
   throttle
   throttle,
-  deepClone,
-  sleep,
   chunk};
