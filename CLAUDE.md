@@ -6,6 +6,15 @@ This repository contains `generate-pr.js`, a script that automatically generates
 
 ## generate-pr.js
 
+**IMPORTANT**: The script is now located at `/Users/bbackus/Desktop/DummyRepos/generate-pr.js` (outside this repo).
+
+Use the `genpr` alias to run it from any branch:
+```bash
+genpr --big-feature
+genpr --add-utilities
+# etc.
+```
+
 ### What It Does
 
 The script automatically:
@@ -22,7 +31,7 @@ The script automatically:
 | `smallTweaks` | 60% | Minor code quality changes (console.logs, TODOs, unused vars, blank lines, commented code) |
 | `addUtilities` | 30% | Adds 4-6 new utility functions to files |
 | `largerRefactors` | 10% | Structural changes (JSDoc comments, parameter renames, export reordering) |
-| `bigFeature` | Flag only | Major features adding 1000+ lines (validation framework, data pipeline, etc.) |
+| `bigFeature` | Flag only | Adds 1400+ line API reference documentation file |
 
 ### Branch Naming Conventions
 
@@ -55,7 +64,7 @@ node generate-pr.js --add-utilities   # or --utilities
 - **Small Tweaks**: Applies 2-4 random tweaks from the template pool
 - **Add Utilities**: Adds 4-6 utility functions (original behavior)
 - **Larger Refactors**: Applies 1-2 structural refactoring operations
-- **Big Features**: Adds complete feature modules with 1000+ lines (validation framework, data pipeline, etc.)
+- **Big Features**: Copies `big-feature-template.md` (1400+ lines) to `docs/API-REFERENCE.md`
 
 ### Files Modified
 
