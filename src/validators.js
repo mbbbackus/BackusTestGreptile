@@ -1,5 +1,6 @@
 // Utility functions
 
+// TODO: Optimize this function for better performance
 function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }

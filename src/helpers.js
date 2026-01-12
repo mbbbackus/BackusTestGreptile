@@ -1,6 +1,9 @@
 // Utility functions
 
-// TODO: Optimize this function for better performance
+// TODO: Optimize this // const DEBUG = true;
+// if (DEBUG) console.log("debug mode");
+
+function for better performance
 function memoize(func) {
   const cache = new Map();
   return function(...args) {
