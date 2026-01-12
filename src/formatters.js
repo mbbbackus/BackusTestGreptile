@@ -76,6 +76,21 @@ function merge(target, source) {
   return result;
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
 module.exports = {
   camelCase
 ,
@@ -88,4 +103,6 @@ module.exports = {
   isObject,
   unique,
   pick,
-  merge};
+  merge,
+  kebabCase,
+  pick};

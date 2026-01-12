@@ -78,6 +78,11 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   memoize
 ,
@@ -88,4 +93,5 @@ module.exports = {
   sleep,
   throttle
   throttle,
-  randomInt};
+  randomInt,
+  deepClone};

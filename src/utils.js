@@ -116,6 +116,11 @@ function throttle(func, limit) {
   };
 }
 
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -133,4 +138,5 @@ module.exports = {
   deepClone,
   camelCase,
   sleep,
-  throttle};
+  throttle,
+  isObject};
