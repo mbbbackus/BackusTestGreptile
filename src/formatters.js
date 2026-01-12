@@ -74,6 +74,18 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   camelCase
 ,
@@ -86,4 +98,6 @@ module.exports = {
   isObject,
   unique,
   merge,
-  isEmail};
+  isEmail,
+  kebabCase,
+  deepClone};

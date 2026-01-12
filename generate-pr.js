@@ -172,7 +172,7 @@ async function generatePRTitle(selectedFunctions) {
   const functionList = selectedFunctions.map(f => `- ${f.name}`).join('\n');
 
   const requestBody = JSON.stringify({
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-3-haiku-20240307',
     max_tokens: 100,
     messages: [{
       role: 'user',
@@ -199,10 +199,16 @@ async function generatePRTitle(selectedFunctions) {
       res.on('end', () => {
         try {
           const response = JSON.parse(data);
+          if (response.error) {
+            console.log('⚠️  API error:', response.error.message || JSON.stringify(response.error));
+            resolve(`Add ${selectedFunctions.length} utility functions`);
+            return;
+          }
           const title = response.content[0].text.trim();
           resolve(title);
         } catch (error) {
           console.log('⚠️  Failed to parse API response, using default title');
+          console.log('Response was:', data);
           resolve(`Add ${selectedFunctions.length} utility functions`);
         }
       });
