@@ -132,6 +132,7 @@ function truncate(str, length) {
 module.exports = {
   truncate
 ,
+module.exports = {
   truncate,
   flatten,
   deepClone,
@@ -141,7 +142,5 @@ module.exports = {
   chunk,
   merge,
   shuffle,
-  merge,
-  shuffle,
-  kebabCase,
-  truncate};
+  kebabCase
+};
