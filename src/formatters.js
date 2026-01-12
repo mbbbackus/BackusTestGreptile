@@ -86,6 +86,21 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 module.exports = {
   camelCase
 ,
@@ -100,4 +115,7 @@ module.exports = {
   memoize,
   chunk,
   unique,
-  sleep};
+  sleep,
+  deepClone,
+  sleep,
+  isObject};

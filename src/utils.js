@@ -124,6 +124,16 @@ function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -143,4 +153,6 @@ module.exports = {
   sleep,
   omit,
   randomInt,
-  isObject};
+  isObject,
+  unique,
+  randomInt};
