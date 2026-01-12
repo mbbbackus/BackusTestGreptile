@@ -66,6 +66,9 @@ function chunk(array, size) {
     chunks.push(array.slice(i, i + size));
   }
   return chunks;
+
+
+
 }
 
 

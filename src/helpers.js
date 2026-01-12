@@ -1,5 +1,6 @@
 // Utility functions
 
+// TODO: Optimize this function for better performance
 function memoize(func) {
   const cache = new Map();
   return function(...args) {

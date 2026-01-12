@@ -162,21 +162,229 @@ const utilityFunctions = [
   }
 ];
 
-async function generatePRTitle(selectedFunctions) {
+// Small tweak templates
+const smallTweaks = [
+  {
+    name: 'addConsoleLog',
+    description: 'Add console.log debugging statement',
+    apply: (content, filename) => {
+      const funcMatch = content.match(/function\s+(\w+)\s*\(/);
+      if (!funcMatch) return { content, changed: false };
+      const funcName = funcMatch[1];
+      const newLog = `console.log('DEBUG: Entering ${funcName}');\n`;
+      const insertPoint = content.indexOf('{', content.indexOf(`function ${funcName}`)) + 1;
+      return {
+        content: content.slice(0, insertPoint) + '\n  ' + newLog + content.slice(insertPoint),
+        changed: true,
+        detail: `debug log in ${funcName}`
+      };
+    }
+  },
+  {
+    name: 'addTodoComment',
+    description: 'Add TODO comment',
+    apply: (content, filename) => {
+      const todos = [
+        '// TODO: Optimize this function for better performance',
+        '// TODO: Add error handling here',
+        '// FIXME: This might break with null values',
+        '// TODO: Consider caching this result',
+        '// TODO: Add unit tests for edge cases'
+      ];
+      const todo = todos[Math.floor(Math.random() * todos.length)];
+      const funcMatch = content.match(/function\s+(\w+)\s*\(/);
+      if (!funcMatch) return { content, changed: false };
+      const funcName = funcMatch[1];
+      const funcIndex = content.indexOf(`function ${funcName}`);
+      return {
+        content: content.slice(0, funcIndex) + todo + '\n' + content.slice(funcIndex),
+        changed: true,
+        detail: `TODO comment near ${funcName}`
+      };
+    }
+  },
+  {
+    name: 'addUnusedVariable',
+    description: 'Add unused variable declaration',
+    apply: (content, filename) => {
+      const varNames = ['tempResult', 'debugFlag', 'unusedConfig', 'legacyMode', 'cacheEnabled'];
+      const varName = varNames[Math.floor(Math.random() * varNames.length)];
+      const funcMatch = content.match(/function\s+(\w+)\s*\([^)]*\)\s*{/);
+      if (!funcMatch) return { content, changed: false };
+      const insertPoint = content.indexOf('{', content.indexOf(funcMatch[0])) + 1;
+      return {
+        content: content.slice(0, insertPoint) + `\n  const ${varName} = true;` + content.slice(insertPoint),
+        changed: true,
+        detail: `unused var '${varName}'`
+      };
+    }
+  },
+  {
+    name: 'addExtraBlankLines',
+    description: 'Add extra blank lines',
+    apply: (content, filename) => {
+      const lines = content.split('\n');
+      const insertIndex = Math.floor(Math.random() * (lines.length - 5)) + 2;
+      lines.splice(insertIndex, 0, '', '', '');
+      return {
+        content: lines.join('\n'),
+        changed: true,
+        detail: 'extra whitespace'
+      };
+    }
+  },
+  {
+    name: 'addCommentedCode',
+    description: 'Add commented-out code block',
+    apply: (content, filename) => {
+      const commentedBlocks = [
+        '// const oldImplementation = (x) => x * 2;\n// console.log(oldImplementation(5));',
+        '// function deprecatedHelper() {\n//   return null;\n// }',
+        '// const DEBUG = true;\n// if (DEBUG) console.log("debug mode");',
+        '// TODO: Remove this after testing\n// const testValue = 42;'
+      ];
+      const block = commentedBlocks[Math.floor(Math.random() * commentedBlocks.length)];
+      const funcMatch = content.match(/function\s+(\w+)/);
+      if (!funcMatch) return { content, changed: false };
+      const funcIndex = content.indexOf(funcMatch[0]);
+      return {
+        content: content.slice(0, funcIndex) + block + '\n\n' + content.slice(funcIndex),
+        changed: true,
+        detail: 'commented-out code'
+      };
+    }
+  }
+];
+
+// Larger refactor templates
+const largerRefactors = [
+  {
+    name: 'addJSDocComments',
+    description: 'Add JSDoc comments to functions',
+    apply: (content, filename) => {
+      const funcMatches = [...content.matchAll(/function\s+(\w+)\s*\(([^)]*)\)/g)];
+      if (funcMatches.length === 0) return { content, changed: false };
+
+      let newContent = content;
+      let addedCount = 0;
+      for (const match of funcMatches.slice(0, 3)) {
+        const funcName = match[1];
+        const params = match[2].split(',').map(p => p.trim()).filter(p => p);
+        const jsdoc = `/**\n * ${funcName} - Auto-generated documentation\n${params.map(p => ` * @param {*} ${p}`).join('\n')}\n * @returns {*}\n */\n`;
+
+        if (!newContent.includes(`/** \n * ${funcName}`)) {
+          const funcIndex = newContent.indexOf(match[0]);
+          newContent = newContent.slice(0, funcIndex) + jsdoc + newContent.slice(funcIndex);
+          addedCount++;
+        }
+      }
+      return {
+        content: newContent,
+        changed: addedCount > 0,
+        detail: `JSDoc for ${addedCount} functions`
+      };
+    }
+  },
+  {
+    name: 'renameParameters',
+    description: 'Rename function parameters for consistency',
+    apply: (content, filename) => {
+      const renames = [
+        { from: /\bfunc\b/g, to: 'callback' },
+        { from: /\barr\b/g, to: 'array' },
+        { from: /\bobj\b/g, to: 'object' },
+        { from: /\bstr\b/g, to: 'string' },
+        { from: /\bval\b/g, to: 'value' }
+      ];
+
+      let newContent = content;
+      let applied = [];
+      for (const rename of renames) {
+        if (rename.from.test(newContent)) {
+          newContent = newContent.replace(rename.from, rename.to);
+          applied.push(`${rename.from.source} -> ${rename.to}`);
+          break; // Only apply one rename per run
+        }
+      }
+
+      return {
+        content: newContent,
+        changed: applied.length > 0,
+        detail: applied.length > 0 ? `renamed params: ${applied[0]}` : ''
+      };
+    }
+  },
+  {
+    name: 'reorderExports',
+    description: 'Alphabetically reorder exports',
+    apply: (content, filename) => {
+      const exportsMatch = content.match(/module\.exports\s*=\s*{([^}]*)}/s);
+      if (!exportsMatch) return { content, changed: false };
+
+      const exportsList = exportsMatch[1]
+        .split(',')
+        .map(e => e.trim())
+        .filter(e => e)
+        .sort();
+
+      const newExports = `module.exports = {\n  ${exportsList.join(',\n  ')}\n}`;
+      return {
+        content: content.replace(/module\.exports\s*=\s*{[^}]*}/s, newExports),
+        changed: true,
+        detail: 'alphabetized exports'
+      };
+    }
+  }
+];
+
+// Select operation type based on weights
+function selectOperationType() {
+  const rand = Math.random();
+  if (rand < 0.6) return 'smallTweaks';
+  if (rand < 0.9) return 'addUtilities';
+  return 'largerRefactors';
+}
+
+// Get target files for operations
+function getTargetFiles() {
+  return ['src/utils.js', 'src/helpers.js', 'src/formatters.js', 'src/validators.js'];
+}
+
+// Default title fallback
+function getDefaultTitle(operationType, details) {
+  if (operationType === 'addUtilities') {
+    return `Add ${details.functions.length} utility functions`;
+  } else if (operationType === 'smallTweaks') {
+    return `Code cleanup: ${details.changes.length} small fixes`;
+  } else if (operationType === 'largerRefactors') {
+    return `Refactor: ${details.changes[0] || 'code improvements'}`;
+  }
+  return 'Code updates';
+}
+
+async function generatePRTitle(operationType, details) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.log('⚠️  ANTHROPIC_API_KEY not found, using default title');
-    return `Add ${selectedFunctions.length} utility functions`;
+    return getDefaultTitle(operationType, details);
   }
 
-  const functionList = selectedFunctions.map(f => `- ${f.name}`).join('\n');
+  let prompt;
+  if (operationType === 'addUtilities') {
+    const functionList = details.functions.map(f => `- ${f.name}`).join('\n');
+    prompt = `Generate a concise, descriptive PR title (max 60 characters) for adding these utility functions to a JavaScript library:\n${functionList}\n\nTitle should describe what category/purpose these utilities serve. Return ONLY the title, no quotes or extra text.`;
+  } else if (operationType === 'smallTweaks') {
+    prompt = `Generate a concise PR title (max 60 characters) for a code cleanup PR that made these changes:\n${details.changes.join('\n')}\n\nReturn ONLY the title, no quotes or extra text.`;
+  } else if (operationType === 'largerRefactors') {
+    prompt = `Generate a concise PR title (max 60 characters) for a refactoring PR that:\n${details.changes.join('\n')}\n\nReturn ONLY the title, no quotes or extra text.`;
+  }
 
   const requestBody = JSON.stringify({
     model: 'claude-3-haiku-20240307',
     max_tokens: 100,
     messages: [{
       role: 'user',
-      content: `Generate a concise, descriptive PR title (max 60 characters) for adding these utility functions to a JavaScript library:\n${functionList}\n\nTitle should describe what category/purpose these utilities serve. Return ONLY the title, no quotes or extra text.`
+      content: prompt
     }]
   });
 
@@ -204,7 +412,7 @@ async function generatePRTitle(selectedFunctions) {
           const response = JSON.parse(data);
           if (response.error) {
             console.log(`⚠️  API error: ${JSON.stringify(response.error)}`);
-            resolve(`Add ${selectedFunctions.length} utility functions`);
+            resolve(getDefaultTitle(operationType, details));
             return;
           }
           const title = response.content[0].text.trim();
@@ -212,14 +420,14 @@ async function generatePRTitle(selectedFunctions) {
         } catch (error) {
           console.log(`⚠️  Failed to parse API response: ${error.message}`);
           console.log(`BEN! Raw response: ${data.substring(0, 500)}`);
-          resolve(`Add ${selectedFunctions.length} utility functions`);
+          resolve(getDefaultTitle(operationType, details));
         }
       });
     });
 
     req.on('error', (error) => {
       console.log('⚠️  API request failed, using default title');
-      resolve(`Add ${selectedFunctions.length} utility functions`);
+      resolve(getDefaultTitle(operationType, details));
     });
 
     req.write(requestBody);
@@ -227,40 +435,54 @@ async function generatePRTitle(selectedFunctions) {
   });
 }
 
-async function main() {
-  // Generate a random branch name
-  const timestamp = Date.now();
-  const branchName = `feature/add-utilities-${timestamp}`;
+// Execute small tweaks operation
+function executeSmallTweaks() {
+  const targetFiles = getTargetFiles();
+  const numTweaks = Math.floor(Math.random() * 3) + 2; // 2-4 tweaks
+  const shuffledTweaks = [...smallTweaks].sort(() => Math.random() - 0.5);
+  const selectedTweaks = shuffledTweaks.slice(0, numTweaks);
 
-  console.log(`Creating branch: ${branchName}`);
-  execSync(`git checkout -b ${branchName}`, { stdio: 'inherit' });
+  console.log(`\nApplying ${numTweaks} small tweaks...`);
+  const changes = [];
 
-  // Select 4+ random utility functions
+  for (const tweak of selectedTweaks) {
+    const targetFile = targetFiles[Math.floor(Math.random() * targetFiles.length)];
+    if (!fs.existsSync(targetFile)) continue;
+
+    const content = fs.readFileSync(targetFile, 'utf-8');
+    const result = tweak.apply(content, targetFile);
+
+    if (result.changed) {
+      fs.writeFileSync(targetFile, result.content);
+      console.log(`  ✓ ${tweak.description} in ${targetFile}`);
+      changes.push(`- ${result.detail} (${targetFile})`);
+    }
+  }
+
+  return { changes };
+}
+
+// Execute add utilities operation (original behavior)
+function executeAddUtilities() {
   const numFunctions = Math.floor(Math.random() * 3) + 4; // 4-6 functions
   const shuffled = [...utilityFunctions].sort(() => Math.random() - 0.5);
   const selectedFunctions = shuffled.slice(0, numFunctions);
 
-  console.log(`\nGenerating ${numFunctions} utility functions...`);
-
-  // Create/modify files with the new functions
-  const changedFiles = new Set();
+  console.log(`\nAdding ${numFunctions} utility functions...`);
 
   for (const func of selectedFunctions) {
-    // Randomly decide which file to add to
-    const fileOptions = ['src/utils.js', 'src/helpers.js', 'src/formatters.js', 'src/validators.js'];
+    const fileOptions = getTargetFiles();
     const targetFile = fileOptions[Math.floor(Math.random() * fileOptions.length)];
 
     let content;
     if (fs.existsSync(targetFile)) {
       content = fs.readFileSync(targetFile, 'utf-8');
-      // Add function before module.exports
       const exportsIndex = content.lastIndexOf('module.exports');
       if (exportsIndex !== -1) {
         const beforeExports = content.slice(0, exportsIndex);
         const exportsSection = content.slice(exportsIndex);
         content = beforeExports + '\n' + func.code + '\n\n' + exportsSection;
 
-        // Add to exports
         content = content.replace(/module\.exports\s*=\s*{([^}]*)}/s, (match, exports) => {
           const trimmedExports = exports.trim();
           const hasComma = trimmedExports.endsWith(',');
@@ -271,23 +493,106 @@ async function main() {
         content += '\n\n' + func.code + '\n\nmodule.exports = {\n  ' + func.name + '\n};\n';
       }
     } else {
-      // Create new file
       content = `// Utility functions\n\n${func.code}\n\nmodule.exports = {\n  ${func.name}\n};\n`;
     }
 
     fs.writeFileSync(targetFile, content);
-    changedFiles.add(targetFile);
     console.log(`  ✓ Added ${func.name} to ${targetFile}`);
+  }
+
+  return { functions: selectedFunctions };
+}
+
+// Execute larger refactors operation
+function executeLargerRefactors() {
+  const targetFiles = getTargetFiles();
+  const numRefactors = Math.floor(Math.random() * 2) + 1; // 1-2 refactors
+  const shuffledRefactors = [...largerRefactors].sort(() => Math.random() - 0.5);
+  const selectedRefactors = shuffledRefactors.slice(0, numRefactors);
+
+  console.log(`\nApplying ${numRefactors} refactors...`);
+  const changes = [];
+
+  for (const refactor of selectedRefactors) {
+    const targetFile = targetFiles[Math.floor(Math.random() * targetFiles.length)];
+    if (!fs.existsSync(targetFile)) continue;
+
+    const content = fs.readFileSync(targetFile, 'utf-8');
+    const result = refactor.apply(content, targetFile);
+
+    if (result.changed) {
+      fs.writeFileSync(targetFile, result.content);
+      console.log(`  ✓ ${refactor.description} in ${targetFile}`);
+      changes.push(`- ${result.detail} (${targetFile})`);
+    }
+  }
+
+  return { changes };
+}
+
+// Generate commit message based on operation type
+function generateCommitMessage(operationType, details) {
+  if (operationType === 'addUtilities') {
+    const functionNames = details.functions.map(f => f.name).join(', ');
+    return `Add utility functions: ${functionNames}\n\nThis commit adds ${details.functions.length} new utility functions.`;
+  } else if (operationType === 'smallTweaks') {
+    return `Code cleanup: small fixes\n\nChanges:\n${details.changes.join('\n')}`;
+  } else if (operationType === 'largerRefactors') {
+    return `Refactor: code improvements\n\nChanges:\n${details.changes.join('\n')}`;
+  }
+  return 'Code updates';
+}
+
+// Generate PR description based on operation type
+function generatePRDescription(operationType, details) {
+  if (operationType === 'addUtilities') {
+    return `This PR adds ${details.functions.length} new utility functions:\n\n${details.functions.map(f => '- ' + f.name).join('\n')}\n\nThese utilities provide commonly used helper functions.`;
+  } else if (operationType === 'smallTweaks') {
+    return `This PR includes small code cleanup changes:\n\n${details.changes.join('\n')}`;
+  } else if (operationType === 'largerRefactors') {
+    return `This PR refactors code for better maintainability:\n\n${details.changes.join('\n')}`;
+  }
+  return 'Code updates';
+}
+
+async function main() {
+  // Select operation type
+  const operationType = selectOperationType();
+  console.log(`\n📋 Operation type: ${operationType}`);
+
+  // Generate branch name based on operation type
+  const timestamp = Date.now();
+  const branchPrefix = {
+    smallTweaks: 'cleanup',
+    addUtilities: 'feature/add-utilities',
+    largerRefactors: 'refactor'
+  }[operationType];
+  const branchName = `${branchPrefix}-${timestamp}`;
+
+  console.log(`Creating branch: ${branchName}`);
+  execSync(`git checkout -b ${branchName}`, { stdio: 'inherit' });
+
+  // Execute the operation
+  let details;
+  if (operationType === 'smallTweaks') {
+    details = executeSmallTweaks();
+  } else if (operationType === 'addUtilities') {
+    details = executeAddUtilities();
+  } else if (operationType === 'largerRefactors') {
+    details = executeLargerRefactors();
+  }
+
+  // Check if any changes were made
+  if (!details || (details.changes && details.changes.length === 0) || (details.functions && details.functions.length === 0)) {
+    console.log('\n⚠️  No changes were made. Aborting.');
+    execSync('git checkout main', { stdio: 'inherit' });
+    execSync(`git branch -D ${branchName}`, { stdio: 'inherit' });
+    return;
   }
 
   // Stage and commit changes
   console.log('\nCommitting changes...');
-  const functionNames = selectedFunctions.map(f => f.name).join(', ');
-  const commitMessage = `Add utility functions: ${functionNames}
-
-This commit adds ${numFunctions} new utility functions to enhance the utilities library:
-${selectedFunctions.map(f => `- ${f.name}`).join('\n')}`;
-
+  const commitMessage = generateCommitMessage(operationType, details);
   execSync('git add .', { stdio: 'inherit' });
   execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`, { stdio: 'inherit' });
 
@@ -299,15 +604,15 @@ ${selectedFunctions.map(f => `- ${f.name}`).join('\n')}`;
   const remoteUrl = execSync('git remote get-url origin').toString().trim();
   console.log(`\nRemote URL: ${remoteUrl}`);
 
-  // Try to create PR with gh
+  // Generate PR title with LLM
   console.log('\nGenerating PR title with LLM...');
-  const prTitle = await generatePRTitle(selectedFunctions);
+  const prTitle = await generatePRTitle(operationType, details);
   console.log(`Generated title: ${prTitle}`);
 
   console.log('\nAttempting to create pull request...');
 
   try {
-    const description = `This PR adds ${numFunctions} new utility functions to enhance our utilities library:\n\n${selectedFunctions.map(f => `- ${f.name}`).join('\n')}\n\nThese utilities provide commonly used helper functions for TypeScript/JavaScript projects.`;
+    const description = generatePRDescription(operationType, details);
 
     const prOutput = execSync(
       `gh pr create --title "${prTitle}" --body "${description}" --base main`,
@@ -316,7 +621,6 @@ ${selectedFunctions.map(f => `- ${f.name}`).join('\n')}`;
 
     console.log('\n' + prOutput);
 
-    // Extract PR URL from output
     const urlMatch = prOutput.match(/https:\/\/[^\s]+/);
     if (urlMatch) {
       console.log(`\n✅ Pull Request created successfully!`);
