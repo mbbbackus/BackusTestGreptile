@@ -123,18 +123,15 @@ function camelCase(str) {
 }
 
 module.exports = {
-  memoize
-,
+  camelCase,
   deepClone,
-  pick,
-
-
-
-  merge,
   flatten,
+  memoize,
+  merge,
+  merge,
+  pick,
+  sleep,
   sleep,
   throttle
-  chunk,
-  merge,
-  sleep,
-  camelCase};
+  chunk
+};
