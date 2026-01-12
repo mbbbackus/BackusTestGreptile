@@ -1,5 +1,6 @@
 // Utility functions
 
+// TODO: Optimize this function for better performance
 function memoize(func) {
   const cache = new Map();
   return function(...args) {
@@ -73,6 +74,25 @@ function throttle(func, limit) {
   };
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
 module.exports = {
   memoize
 ,
@@ -82,4 +102,4 @@ module.exports = {
   flatten,
   sleep,
   throttle
-  throttle};
+  chunk};

@@ -55,6 +55,37 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function memoize(func) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const result = func.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   camelCase
 ,
@@ -65,4 +96,8 @@ module.exports = {
   shuffle,
   flatten,
   isObject,
-  unique};
+  unique,
+  memoize,
+  chunk,
+  unique,
+  sleep};

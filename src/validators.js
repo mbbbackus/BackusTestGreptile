@@ -66,6 +66,67 @@ function chunk(array, size) {
     chunks.push(array.slice(i, i + size));
   }
   return chunks;
+
+
+
+}
+
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (typeof source[key] === 'object' && source[key] !== null && typeof result[key] === 'object' && result[key] !== null) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
 module.exports = {
@@ -77,4 +138,10 @@ module.exports = {
   groupBy,
   throttle,
   isEmail,
-  chunk};
+  chunk,
+  merge,
+  shuffle,
+  merge,
+  shuffle,
+  kebabCase,
+  truncate};
