@@ -114,6 +114,12 @@ function groupBy(array, key) {
   }, {});
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -131,4 +137,5 @@ module.exports = {
   deepClone,
   camelCase,
   sleep,
-  groupBy};
+  groupBy,
+  isEmail};
