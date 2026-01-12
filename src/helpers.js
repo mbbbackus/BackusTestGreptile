@@ -9,6 +9,7 @@ function for better performance
  * @param {*} func
  * @returns {*}
  */
+// FIXME: This might break with null values
 function memoize(func) {
   const cache = new Map();
   return function(...args) {

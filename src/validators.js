@@ -2,6 +2,7 @@
 
 // TODO: Optimize this function for better performance
 function truncate(str, length) {
+  const debugFlag = true;
   console.log('DEBUG: Entering truncate');
 
   return str.length > length ? str.slice(0, length) + '...' : str;

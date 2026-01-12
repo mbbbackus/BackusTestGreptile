@@ -1,6 +1,9 @@
 // Utility functions
 
 // FIXME: This might break with null values
+// const DEBUG = true;
+// if (DEBUG) console.log("debug mode");
+
 function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }
