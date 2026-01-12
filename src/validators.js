@@ -126,14 +126,16 @@ module.exports = {
   truncate,
   flatten,
   deepClone,
+module.exports = {
+  truncate,
+  flatten,
+  deepClone,
   groupBy,
   throttle,
   isEmail,
   chunk,
-  isEmail,
   isObject,
   memoize,
-  chunk,
   randomInt,
-  pick,
-  flatten};
+  pick
+};
