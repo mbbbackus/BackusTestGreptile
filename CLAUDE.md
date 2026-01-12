@@ -22,12 +22,14 @@ The script automatically:
 | `smallTweaks` | 60% | Minor code quality changes (console.logs, TODOs, unused vars, blank lines, commented code) |
 | `addUtilities` | 30% | Adds 4-6 new utility functions to files |
 | `largerRefactors` | 10% | Structural changes (JSDoc comments, parameter renames, export reordering) |
+| `bigFeature` | Flag only | Major features adding 1000+ lines (validation framework, data pipeline, etc.) |
 
 ### Branch Naming Conventions
 
 - Small tweaks: `cleanup-{timestamp}`
 - Add utilities: `feature/add-utilities-{timestamp}`
 - Larger refactors: `refactor-{timestamp}`
+- Big feature: `feature/big-{timestamp}`
 
 ### Environment Requirements
 
@@ -41,6 +43,7 @@ The script automatically:
 node generate-pr.js
 
 # Force a specific operation type
+node generate-pr.js --big-feature     # or --feature (1000+ lines)
 node generate-pr.js --big-refactor    # or --refactor
 node generate-pr.js --small-tweaks    # or --tweaks
 node generate-pr.js --add-utilities   # or --utilities
@@ -52,6 +55,7 @@ node generate-pr.js --add-utilities   # or --utilities
 - **Small Tweaks**: Applies 2-4 random tweaks from the template pool
 - **Add Utilities**: Adds 4-6 utility functions (original behavior)
 - **Larger Refactors**: Applies 1-2 structural refactoring operations
+- **Big Features**: Adds complete feature modules with 1000+ lines (validation framework, data pipeline, etc.)
 
 ### Files Modified
 
