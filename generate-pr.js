@@ -539,144 +539,936 @@ function executeLargerRefactors() {
 function executeBigFeature() {
   console.log('\nAdding big feature: advanced caching system...');
 
-  const featureCode = `// Advanced Caching System
+  const files = [];
+
+  // File 1: Main cache implementation (expanded with more features)
+  files.push({
+    path: 'src/cache/CacheManager.js',
+    content: `/**
+ * CacheManager - Advanced caching system with TTL support
+ *
+ * Features:
+ * - Time-to-live (TTL) expiration
+ * - Maximum size limits with automatic eviction
+ * - Statistics tracking (hits, misses, evictions)
+ * - Multiple eviction strategies
+ * - Serialization support
+ * - Event emitters for cache operations
+ */
+
 class CacheManager {
+  /**
+   * Creates a new CacheManager instance
+   * @param {Object} options - Configuration options
+   * @param {number} options.maxSize - Maximum number of items in cache (default: 1000)
+   * @param {number} options.ttl - Default time-to-live in milliseconds (default: 3600000)
+   * @param {boolean} options.checkPeriod - Interval for automatic cleanup in ms (default: 60000)
+   * @param {boolean} options.trackStats - Whether to track statistics (default: true)
+   */
   constructor(options = {}) {
     this.maxSize = options.maxSize || 1000;
-    this.ttl = options.ttl || 3600000;
+    this.ttl = options.ttl || 3600000; // 1 hour default
+    this.checkPeriod = options.checkPeriod || 60000; // 1 minute
+    this.trackStats = options.trackStats !== false;
+
+    // Core storage
     this.cache = new Map();
     this.timestamps = new Map();
-  }
+    this.ttls = new Map();
 
-  set(key, value, ttl = this.ttl) {
-    if (this.cache.size >= this.maxSize) {
-      const oldestKey = this.cache.keys().next().value;
-      this.cache.delete(oldestKey);
-      this.timestamps.delete(oldestKey);
+    // Statistics
+    this.stats = {
+      hits: 0,
+      misses: 0,
+      sets: 0,
+      deletes: 0,
+      evictions: 0,
+      expirations: 0
+    };
+
+    // Event handlers
+    this.eventHandlers = {
+      hit: [],
+      miss: [],
+      set: [],
+      delete: [],
+      evict: [],
+      expire: []
+    };
+
+    // Start automatic cleanup if enabled
+    if (this.checkPeriod > 0) {
+      this.startCleanupTimer();
     }
-    this.cache.set(key, value);
-    this.timestamps.set(key, Date.now() + ttl);
   }
 
+  /**
+   * Sets a value in the cache
+   * @param {string} key - Cache key
+   * @param {*} value - Value to cache
+   * @param {number} ttl - Optional TTL override in milliseconds
+   * @returns {boolean} Whether the set was successful
+   */
+  set(key, value, ttl = this.ttl) {
+    // Validate inputs
+    if (key === null || key === undefined) {
+      throw new Error('Cache key cannot be null or undefined');
+    }
+
+    // Check if we need to evict
+    if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
+      this.evictOne();
+    }
+
+    // Store the value
+    this.cache.set(key, value);
+    this.timestamps.set(key, Date.now());
+    this.ttls.set(key, ttl);
+
+    // Update stats
+    if (this.trackStats) {
+      this.stats.sets++;
+    }
+
+    // Emit event
+    this.emit('set', { key, value, ttl });
+
+    return true;
+  }
+
+  /**
+   * Gets a value from the cache
+   * @param {string} key - Cache key
+   * @returns {*} The cached value or null if not found/expired
+   */
   get(key) {
-    if (!this.cache.has(key)) return null;
-    const expiry = this.timestamps.get(key);
-    if (Date.now() > expiry) {
-      this.cache.delete(key);
-      this.timestamps.delete(key);
+    // Check if key exists
+    if (!this.cache.has(key)) {
+      if (this.trackStats) {
+        this.stats.misses++;
+      }
+      this.emit('miss', { key });
       return null;
     }
-    return this.cache.get(key);
+
+    // Check if expired
+    const timestamp = this.timestamps.get(key);
+    const ttl = this.ttls.get(key);
+    const now = Date.now();
+
+    if (now > timestamp + ttl) {
+      // Expired - remove it
+      this.cache.delete(key);
+      this.timestamps.delete(key);
+      this.ttls.delete(key);
+
+      if (this.trackStats) {
+        this.stats.misses++;
+        this.stats.expirations++;
+      }
+
+      this.emit('expire', { key });
+      return null;
+    }
+
+    // Valid hit
+    if (this.trackStats) {
+      this.stats.hits++;
+    }
+
+    const value = this.cache.get(key);
+    this.emit('hit', { key, value });
+
+    return value;
   }
 
+  /**
+   * Checks if a key exists and is not expired
+   * @param {string} key - Cache key
+   * @returns {boolean} Whether the key exists
+   */
   has(key) {
     return this.get(key) !== null;
   }
 
+  /**
+   * Deletes a key from the cache
+   * @param {string} key - Cache key
+   * @returns {boolean} Whether the key was deleted
+   */
   delete(key) {
+    const existed = this.cache.has(key);
+
     this.cache.delete(key);
     this.timestamps.delete(key);
+    this.ttls.delete(key);
+
+    if (existed && this.trackStats) {
+      this.stats.deletes++;
+    }
+
+    if (existed) {
+      this.emit('delete', { key });
+    }
+
+    return existed;
   }
 
+  /**
+   * Clears all items from the cache
+   */
   clear() {
+    const size = this.cache.size;
+
     this.cache.clear();
     this.timestamps.clear();
+    this.ttls.clear();
+
+    // Reset stats except totals
+    if (this.trackStats) {
+      this.stats.deletes += size;
+    }
   }
 
+  /**
+   * Returns the current size of the cache
+   * @returns {number} Number of items in cache
+   */
   size() {
     this.cleanup();
     return this.cache.size;
   }
 
+  /**
+   * Removes expired items from the cache
+   * @returns {number} Number of items removed
+   */
   cleanup() {
     const now = Date.now();
-    for (const [key, expiry] of this.timestamps.entries()) {
-      if (now > expiry) {
+    let removed = 0;
+
+    for (const [key, timestamp] of this.timestamps.entries()) {
+      const ttl = this.ttls.get(key);
+      if (now > timestamp + ttl) {
         this.cache.delete(key);
         this.timestamps.delete(key);
+        this.ttls.delete(key);
+        removed++;
+
+        if (this.trackStats) {
+          this.stats.expirations++;
+        }
+
+        this.emit('expire', { key });
       }
     }
+
+    return removed;
   }
 
+  /**
+   * Evicts one item from the cache (FIFO strategy)
+   * Override this method to implement different eviction strategies
+   * @returns {boolean} Whether an item was evicted
+   */
+  evictOne() {
+    if (this.cache.size === 0) {
+      return false;
+    }
+
+    // FIFO - remove oldest inserted
+    const oldestKey = this.cache.keys().next().value;
+    this.cache.delete(oldestKey);
+    this.timestamps.delete(oldestKey);
+    this.ttls.delete(oldestKey);
+
+    if (this.trackStats) {
+      this.stats.evictions++;
+    }
+
+    this.emit('evict', { key: oldestKey });
+
+    return true;
+  }
+
+  /**
+   * Gets all keys in the cache (excluding expired)
+   * @returns {Array<string>} Array of cache keys
+   */
   keys() {
     this.cleanup();
     return Array.from(this.cache.keys());
   }
 
+  /**
+   * Gets all values in the cache (excluding expired)
+   * @returns {Array<*>} Array of cache values
+   */
   values() {
     this.cleanup();
     return Array.from(this.cache.values());
   }
 
+  /**
+   * Gets all entries in the cache (excluding expired)
+   * @returns {Array<[string, *]>} Array of [key, value] pairs
+   */
   entries() {
     this.cleanup();
     return Array.from(this.cache.entries());
   }
+
+  /**
+   * Returns cache statistics
+   * @returns {Object} Statistics object
+   */
+  getStats() {
+    return {
+      ...this.stats,
+      size: this.cache.size,
+      hitRate: this.stats.hits / (this.stats.hits + this.stats.misses) || 0
+    };
+  }
+
+  /**
+   * Resets cache statistics
+   */
+  resetStats() {
+    this.stats = {
+      hits: 0,
+      misses: 0,
+      sets: 0,
+      deletes: 0,
+      evictions: 0,
+      expirations: 0
+    };
+  }
+
+  /**
+   * Registers an event handler
+   * @param {string} event - Event name (hit, miss, set, delete, evict, expire)
+   * @param {Function} handler - Event handler function
+   */
+  on(event, handler) {
+    if (this.eventHandlers[event]) {
+      this.eventHandlers[event].push(handler);
+    }
+  }
+
+  /**
+   * Emits an event to all registered handlers
+   * @param {string} event - Event name
+   * @param {Object} data - Event data
+   */
+  emit(event, data) {
+    if (this.eventHandlers[event]) {
+      for (const handler of this.eventHandlers[event]) {
+        try {
+          handler(data);
+        } catch (error) {
+          console.error('Error in event handler:', error);
+        }
+      }
+    }
+  }
+
+  /**
+   * Starts the automatic cleanup timer
+   */
+  startCleanupTimer() {
+    if (this.cleanupTimer) {
+      return;
+    }
+
+    this.cleanupTimer = setInterval(() => {
+      this.cleanup();
+    }, this.checkPeriod);
+
+    // Don't prevent process exit
+    if (this.cleanupTimer.unref) {
+      this.cleanupTimer.unref();
+    }
+  }
+
+  /**
+   * Stops the automatic cleanup timer
+   */
+  stopCleanupTimer() {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+      this.cleanupTimer = null;
+    }
+  }
+
+  /**
+   * Exports cache to JSON
+   * @returns {Object} Serialized cache data
+   */
+  toJSON() {
+    this.cleanup();
+
+    const data = {
+      entries: [],
+      stats: this.stats,
+      config: {
+        maxSize: this.maxSize,
+        ttl: this.ttl,
+        checkPeriod: this.checkPeriod
+      }
+    };
+
+    const now = Date.now();
+    for (const [key, value] of this.cache.entries()) {
+      const timestamp = this.timestamps.get(key);
+      const ttl = this.ttls.get(key);
+      const remainingTtl = timestamp + ttl - now;
+
+      data.entries.push({
+        key,
+        value,
+        remainingTtl
+      });
+    }
+
+    return data;
+  }
+
+  /**
+   * Imports cache from JSON
+   * @param {Object} data - Serialized cache data
+   */
+  fromJSON(data) {
+    this.clear();
+
+    if (data.config) {
+      this.maxSize = data.config.maxSize;
+      this.ttl = data.config.ttl;
+      this.checkPeriod = data.config.checkPeriod;
+    }
+
+    if (data.stats) {
+      this.stats = { ...data.stats };
+    }
+
+    if (data.entries) {
+      for (const entry of data.entries) {
+        if (entry.remainingTtl > 0) {
+          this.set(entry.key, entry.value, entry.remainingTtl);
+        }
+      }
+    }
+  }
+
+  /**
+   * Cleanup on destruction
+   */
+  destroy() {
+    this.stopCleanupTimer();
+    this.clear();
+    this.eventHandlers = {};
+  }
 }
 
+module.exports = CacheManager;
+`
+  });
+
+  // File 2: LRU Cache implementation
+  files.push({
+    path: 'src/cache/LRUCache.js',
+    content: `/**
+ * LRUCache - Least Recently Used cache implementation
+ *
+ * Extends CacheManager with LRU eviction strategy
+ */
+
+const CacheManager = require('./CacheManager');
+
 class LRUCache extends CacheManager {
-  constructor(options) {
+  /**
+   * Creates a new LRUCache instance
+   * @param {Object} options - Configuration options (same as CacheManager)
+   */
+  constructor(options = {}) {
     super(options);
+
+    // Track access order for LRU
     this.accessOrder = [];
   }
 
+  /**
+   * Gets a value and updates access order
+   * @param {string} key - Cache key
+   * @returns {*} The cached value or null
+   */
   get(key) {
     const value = super.get(key);
+
     if (value !== null) {
-      const index = this.accessOrder.indexOf(key);
-      if (index > -1) {
-        this.accessOrder.splice(index, 1);
-      }
-      this.accessOrder.push(key);
+      // Move to end (most recently used)
+      this.updateAccessOrder(key);
     }
+
     return value;
   }
 
+  /**
+   * Sets a value and updates access order
+   * @param {string} key - Cache key
+   * @param {*} value - Value to cache
+   * @param {number} ttl - Optional TTL override
+   * @returns {boolean} Whether the set was successful
+   */
   set(key, value, ttl) {
-    if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
-      const lruKey = this.accessOrder.shift();
-      this.cache.delete(lruKey);
-      this.timestamps.delete(lruKey);
+    const existed = this.cache.has(key);
+
+    // Let parent handle the actual set
+    const result = super.set(key, value, ttl);
+
+    if (result) {
+      if (existed) {
+        // Update existing key position
+        this.updateAccessOrder(key);
+      } else {
+        // New key - add to end
+        this.accessOrder.push(key);
+      }
     }
-    super.set(key, value, ttl);
+
+    return result;
+  }
+
+  /**
+   * Deletes a key and removes from access order
+   * @param {string} key - Cache key
+   * @returns {boolean} Whether the key was deleted
+   */
+  delete(key) {
+    const result = super.delete(key);
+
+    if (result) {
+      this.removeFromAccessOrder(key);
+    }
+
+    return result;
+  }
+
+  /**
+   * Clears cache and access order
+   */
+  clear() {
+    super.clear();
+    this.accessOrder = [];
+  }
+
+  /**
+   * Evicts the least recently used item
+   * @returns {boolean} Whether an item was evicted
+   */
+  evictOne() {
+    if (this.accessOrder.length === 0) {
+      return false;
+    }
+
+    // Remove least recently used (first in array)
+    const lruKey = this.accessOrder.shift();
+
+    this.cache.delete(lruKey);
+    this.timestamps.delete(lruKey);
+    this.ttls.delete(lruKey);
+
+    if (this.trackStats) {
+      this.stats.evictions++;
+    }
+
+    this.emit('evict', { key: lruKey, reason: 'lru' });
+
+    return true;
+  }
+
+  /**
+   * Updates access order for a key (moves to end)
+   * @param {string} key - Cache key
+   */
+  updateAccessOrder(key) {
+    this.removeFromAccessOrder(key);
     this.accessOrder.push(key);
+  }
+
+  /**
+   * Removes a key from access order
+   * @param {string} key - Cache key
+   */
+  removeFromAccessOrder(key) {
+    const index = this.accessOrder.indexOf(key);
+    if (index > -1) {
+      this.accessOrder.splice(index, 1);
+    }
+  }
+
+  /**
+   * Cleanup expired items and update access order
+   * @returns {number} Number of items removed
+   */
+  cleanup() {
+    const now = Date.now();
+    const expiredKeys = [];
+
+    for (const [key, timestamp] of this.timestamps.entries()) {
+      const ttl = this.ttls.get(key);
+      if (now > timestamp + ttl) {
+        expiredKeys.push(key);
+      }
+    }
+
+    // Remove expired keys
+    for (const key of expiredKeys) {
+      this.cache.delete(key);
+      this.timestamps.delete(key);
+      this.ttls.delete(key);
+      this.removeFromAccessOrder(key);
+
+      if (this.trackStats) {
+        this.stats.expirations++;
+      }
+
+      this.emit('expire', { key });
+    }
+
+    return expiredKeys.length;
+  }
+
+  /**
+   * Gets the least recently used key
+   * @returns {string|null} The LRU key or null if empty
+   */
+  getLRUKey() {
+    return this.accessOrder.length > 0 ? this.accessOrder[0] : null;
+  }
+
+  /**
+   * Gets the most recently used key
+   * @returns {string|null} The MRU key or null if empty
+   */
+  getMRUKey() {
+    return this.accessOrder.length > 0 ? this.accessOrder[this.accessOrder.length - 1] : null;
   }
 }
 
+module.exports = LRUCache;
+`
+  });
+
+  // File 3: Cache utilities
+  files.push({
+    path: 'src/cache/utils.js',
+    content: `/**
+ * Cache utility functions
+ */
+
+const CacheManager = require('./CacheManager');
+
+/**
+ * Memoization decorator using cache
+ * @param {Function} fn - Function to memoize
+ * @param {Object} options - Cache options
+ * @returns {Function} Memoized function
+ */
 function memoize(fn, options = {}) {
   const cache = new CacheManager(options);
-  return function(...args) {
-    const key = JSON.stringify(args);
+  const keyGenerator = options.keyGenerator || ((args) => JSON.stringify(args));
+
+  const memoized = function(...args) {
+    const key = keyGenerator(args);
+
+    // Check cache first
     if (cache.has(key)) {
       return cache.get(key);
     }
+
+    // Compute and cache result
     const result = fn.apply(this, args);
     cache.set(key, result);
+
     return result;
+  };
+
+  // Attach cache methods to memoized function
+  memoized.cache = cache;
+  memoized.clear = () => cache.clear();
+  memoized.delete = (key) => cache.delete(key);
+  memoized.stats = () => cache.getStats();
+
+  return memoized;
+}
+
+/**
+ * Async memoization decorator
+ * @param {Function} fn - Async function to memoize
+ * @param {Object} options - Cache options
+ * @returns {Function} Memoized async function
+ */
+function memoizeAsync(fn, options = {}) {
+  const cache = new CacheManager(options);
+  const keyGenerator = options.keyGenerator || ((args) => JSON.stringify(args));
+  const pendingPromises = new Map();
+
+  const memoized = async function(...args) {
+    const key = keyGenerator(args);
+
+    // Check cache first
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+
+    // Check if already pending
+    if (pendingPromises.has(key)) {
+      return pendingPromises.get(key);
+    }
+
+    // Compute result
+    const promise = fn.apply(this, args)
+      .then(result => {
+        cache.set(key, result);
+        pendingPromises.delete(key);
+        return result;
+      })
+      .catch(error => {
+        pendingPromises.delete(key);
+        throw error;
+      });
+
+    pendingPromises.set(key, promise);
+    return promise;
+  };
+
+  memoized.cache = cache;
+  memoized.clear = () => {
+    cache.clear();
+    pendingPromises.clear();
+  };
+  memoized.delete = (key) => cache.delete(key);
+  memoized.stats = () => cache.getStats();
+
+  return memoized;
+}
+
+/**
+ * Creates a cache with automatic persistence
+ * @param {string} persistKey - Key for localStorage/file storage
+ * @param {Object} options - Cache options
+ * @returns {CacheManager} Cache instance with persistence
+ */
+function createPersistentCache(persistKey, options = {}) {
+  const cache = new CacheManager(options);
+
+  // Try to load from storage
+  try {
+    const stored = options.storage ? options.storage.getItem(persistKey) : null;
+    if (stored) {
+      const data = JSON.parse(stored);
+      cache.fromJSON(data);
+    }
+  } catch (error) {
+    console.warn('Failed to load cache from storage:', error);
+  }
+
+  // Save periodically
+  const savePeriod = options.savePeriod || 60000; // 1 minute
+  const saveTimer = setInterval(() => {
+    try {
+      const data = cache.toJSON();
+      const serialized = JSON.stringify(data);
+      if (options.storage) {
+        options.storage.setItem(persistKey, serialized);
+      }
+    } catch (error) {
+      console.warn('Failed to save cache to storage:', error);
+    }
+  }, savePeriod);
+
+  // Don't prevent exit
+  if (saveTimer.unref) {
+    saveTimer.unref();
+  }
+
+  // Override destroy to save one last time
+  const originalDestroy = cache.destroy.bind(cache);
+  cache.destroy = function() {
+    clearInterval(saveTimer);
+
+    try {
+      const data = cache.toJSON();
+      const serialized = JSON.stringify(data);
+      if (options.storage) {
+        options.storage.setItem(persistKey, serialized);
+      }
+    } catch (error) {
+      console.warn('Failed to save cache on destroy:', error);
+    }
+
+    originalDestroy();
+  };
+
+  return cache;
+}
+
+/**
+ * Creates a multi-level cache
+ * @param {Array<CacheManager>} caches - Array of caches in order (fastest first)
+ * @returns {Object} Multi-level cache interface
+ */
+function createMultiLevelCache(caches) {
+  if (!Array.isArray(caches) || caches.length === 0) {
+    throw new Error('Must provide at least one cache');
+  }
+
+  return {
+    get(key) {
+      for (let i = 0; i < caches.length; i++) {
+        const value = caches[i].get(key);
+
+        if (value !== null) {
+          // Populate higher level caches
+          for (let j = 0; j < i; j++) {
+            caches[j].set(key, value);
+          }
+
+          return value;
+        }
+      }
+
+      return null;
+    },
+
+    set(key, value, ttl) {
+      // Set in all levels
+      for (const cache of caches) {
+        cache.set(key, value, ttl);
+      }
+    },
+
+    has(key) {
+      return this.get(key) !== null;
+    },
+
+    delete(key) {
+      let deleted = false;
+      for (const cache of caches) {
+        if (cache.delete(key)) {
+          deleted = true;
+        }
+      }
+      return deleted;
+    },
+
+    clear() {
+      for (const cache of caches) {
+        cache.clear();
+      }
+    },
+
+    getStats() {
+      return caches.map(cache => cache.getStats());
+    }
   };
 }
 
-module.exports = { CacheManager, LRUCache, memoize };
-`;
+/**
+ * Batches multiple cache operations
+ * @param {CacheManager} cache - Cache instance
+ * @param {Function} fn - Function that performs cache operations
+ * @returns {*} Result of the function
+ */
+function batchOperations(cache, fn) {
+  // Temporarily disable cleanup
+  const originalCheckPeriod = cache.checkPeriod;
+  cache.stopCleanupTimer();
 
-  const filePath = 'src/advanced/cache.js';
-  const dir = 'src/advanced';
+  try {
+    return fn();
+  } finally {
+    // Re-enable cleanup
+    cache.checkPeriod = originalCheckPeriod;
+    cache.startCleanupTimer();
+    cache.cleanup();
+  }
+}
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+module.exports = {
+  memoize,
+  memoizeAsync,
+  createPersistentCache,
+  createMultiLevelCache,
+  batchOperations
+};
+`
+  });
+
+  // File 4: Index/exports
+  files.push({
+    path: 'src/cache/index.js',
+    content: `/**
+ * Cache module - Advanced caching system
+ *
+ * @module cache
+ */
+
+const CacheManager = require('./CacheManager');
+const LRUCache = require('./LRUCache');
+const {
+  memoize,
+  memoizeAsync,
+  createPersistentCache,
+  createMultiLevelCache,
+  batchOperations
+} = require('./utils');
+
+module.exports = {
+  // Classes
+  CacheManager,
+  LRUCache,
+
+  // Utilities
+  memoize,
+  memoizeAsync,
+  createPersistentCache,
+  createMultiLevelCache,
+  batchOperations,
+
+  // Factory function
+  createCache: (options) => new CacheManager(options),
+  createLRUCache: (options) => new LRUCache(options)
+};
+`
+  });
+
+  let totalLines = 0;
+  const addedFiles = [];
+
+  // Create all files
+  for (const file of files) {
+    const dir = file.path.substring(0, file.path.lastIndexOf('/'));
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.writeFileSync(file.path, file.content);
+    const lines = file.content.split('\n').length;
+    totalLines += lines;
+
+    console.log(`  ✓ Created ${file.path} (${lines} lines)`);
+    addedFiles.push(file.path);
   }
 
-  fs.writeFileSync(filePath, featureCode);
-  const lines = featureCode.split('\n').length;
-
-  console.log(`  ✓ Created ${filePath} (${lines} lines)`);
-  console.log(`\nTotal lines added: ${lines}`);
+  console.log(`\nTotal lines added: ${totalLines}`);
 
   return {
     feature: 'caching-system',
-    description: 'advanced caching system with LRU support',
-    files: [filePath],
-    lines: lines
+    description: 'comprehensive caching system with LRU, memoization, and persistence',
+    files: addedFiles,
+    lines: totalLines
   };
 }
 
