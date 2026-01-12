@@ -105,5 +105,4 @@ module.exports = {
   flatten,
   sleep,
   throttle
-  throttle,
   chunk};
