@@ -5,6 +5,10 @@
 // TODO: Remove this after testing
 // const testValue = 42;
 
+// function deprecatedHelper() {
+//   return null;
+// }
+
 function formatDate(date) {
   console.log('DEBUG: Entering formatDate');
 
