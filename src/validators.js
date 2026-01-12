@@ -120,6 +120,11 @@ function flatten(array) {
   }, []);
 }
 
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
 module.exports = {
   truncate
 ,
@@ -136,4 +141,5 @@ module.exports = {
   chunk,
   randomInt,
   pick,
-  flatten};
+  flatten,
+  truncate};

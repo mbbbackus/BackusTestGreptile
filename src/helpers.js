@@ -98,6 +98,28 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   memoize
 ,
@@ -111,4 +133,7 @@ module.exports = {
   randomInt,
   deepClone,
   shuffle,
-  deepClone};
+  deepClone,
+  chunk,
+  isEmail,
+  omit};
