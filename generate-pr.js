@@ -419,7 +419,7 @@ async function generatePRTitle(operationType, details) {
           resolve(title);
         } catch (error) {
           console.log(`⚠️  Failed to parse API response: ${error.message}`);
-          console.log(`BEN! Raw response: ${data.substring(0, 500)}`);
+          console.log(`⚠️  Raw response: ${data.substring(0, 500)}`);
           resolve(getDefaultTitle(operationType, details));
         }
       });
