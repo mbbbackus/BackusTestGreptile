@@ -91,6 +91,20 @@ function memoize(func) {
   };
 }
 
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   truncate
 ,
@@ -103,4 +117,6 @@ module.exports = {
   chunk,
   isEmail,
   isObject,
-  memoize};
+  memoize,
+  chunk,
+  randomInt};
