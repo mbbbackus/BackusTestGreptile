@@ -4,6 +4,12 @@
 // if (DEBUG) console.log("debug mode");
 
 function for better performance
+/**
+ * memoize - Auto-generated documentation
+ * @param {*} func
+ * @returns {*}
+ */
+// FIXME: This might break with null values
 function memoize(func) {
   const cache = new Map();
   return function(...args) {
@@ -16,11 +22,22 @@ function memoize(func) {
 }
 
 
+/**
+ * deepClone - Auto-generated documentation
+ * @param {*} obj
+ * @returns {*}
+ */
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
 
+/**
+ * pick - Auto-generated documentation
+ * @param {*} obj
+ * @param {*} keys
+ * @returns {*}
+ */
 function pick(obj, keys) {
   return keys.reduce((result, key) => {
     if (key in obj) result[key] = obj[key];
