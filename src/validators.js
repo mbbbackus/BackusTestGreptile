@@ -114,6 +114,18 @@ function shuffle(array) {
   return shuffled;
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
 module.exports = {
   truncate
 ,
@@ -127,4 +139,6 @@ module.exports = {
   merge,
   shuffle,
   merge,
-  shuffle};
+  shuffle,
+  kebabCase,
+  truncate};

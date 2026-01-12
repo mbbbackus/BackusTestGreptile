@@ -81,6 +81,11 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   camelCase
 ,
@@ -94,4 +99,5 @@ module.exports = {
   unique,
   memoize,
   chunk,
-  unique};
+  unique,
+  sleep};

@@ -172,7 +172,7 @@ async function generatePRTitle(selectedFunctions) {
   const functionList = selectedFunctions.map(f => `- ${f.name}`).join('\n');
 
   const requestBody = JSON.stringify({
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-3-haiku-20240307',
     max_tokens: 100,
     messages: [{
       role: 'user',
@@ -197,10 +197,13 @@ async function generatePRTitle(selectedFunctions) {
       let data = '';
       res.on('data', (chunk) => data += chunk);
       res.on('end', () => {
+        if (res.statusCode !== 200) {
+          console.log(`⚠️  API returned status ${res.statusCode}`);
+        }
         try {
           const response = JSON.parse(data);
           if (response.error) {
-            console.log(`⚠️  API error: ${response.error.message}`);
+            console.log(`⚠️  API error: ${JSON.stringify(response.error)}`);
             resolve(`Add ${selectedFunctions.length} utility functions`);
             return;
           }

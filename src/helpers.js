@@ -83,6 +83,15 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
 module.exports = {
   memoize
 ,
@@ -94,4 +103,5 @@ module.exports = {
   throttle
   throttle,
   deepClone,
-  sleep};
+  sleep,
+  chunk};
