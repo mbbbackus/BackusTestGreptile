@@ -199,10 +199,16 @@ async function generatePRTitle(selectedFunctions) {
       res.on('end', () => {
         try {
           const response = JSON.parse(data);
+          if (response.error) {
+            console.log(`⚠️  API error: ${response.error.message}`);
+            resolve(`Add ${selectedFunctions.length} utility functions`);
+            return;
+          }
           const title = response.content[0].text.trim();
           resolve(title);
         } catch (error) {
-          console.log('⚠️  Failed to parse API response, using default title');
+          console.log(`⚠️  Failed to parse API response: ${error.message}`);
+          console.log(`BEN! Raw response: ${data.substring(0, 500)}`);
           resolve(`Add ${selectedFunctions.length} utility functions`);
         }
       });

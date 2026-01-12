@@ -91,6 +91,29 @@ function shuffle(array) {
   return shuffled;
 }
 
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 module.exports = {
   truncate
 ,
@@ -101,5 +124,7 @@ module.exports = {
   throttle,
   isEmail,
   chunk,
+  merge,
+  shuffle,
   merge,
   shuffle};

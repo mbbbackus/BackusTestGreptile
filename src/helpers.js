@@ -78,6 +78,11 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   memoize
 ,
@@ -88,4 +93,5 @@ module.exports = {
   sleep,
   throttle
   throttle,
-  deepClone};
+  deepClone,
+  sleep};

@@ -76,6 +76,11 @@ function chunk(array, size) {
   return chunks;
 }
 
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
 module.exports = {
   camelCase
 ,
@@ -88,4 +93,5 @@ module.exports = {
   isObject,
   unique,
   memoize,
-  chunk};
+  chunk,
+  unique};

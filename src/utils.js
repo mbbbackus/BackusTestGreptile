@@ -111,6 +111,16 @@ function omit(obj, keys) {
   return result;
 }
 
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -128,4 +138,6 @@ module.exports = {
   deepClone,
   camelCase,
   sleep,
-  omit};
+  omit,
+  randomInt,
+  isObject};
