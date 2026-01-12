@@ -337,871 +337,6 @@ const largerRefactors = [
   }
 ];
 
-// Big feature templates (1000+ lines)
-const bigFeatures = [
-  {
-    name: 'validationFramework',
-    description: 'Add comprehensive validation framework',
-    files: [
-      {
-        path: 'src/validation/validators.js',
-        content: `// Validation Framework
-// Comprehensive validation utilities for data validation
-
-class ValidationError extends Error {
-  constructor(message, field, value) {
-    super(message);
-    this.name = 'ValidationError';
-    this.field = field;
-    this.value = value;
-  }
-}
-
-class ValidationRule {
-  constructor(name, validator, message) {
-    this.name = name;
-    this.validator = validator;
-    this.message = message;
-  }
-
-  validate(value, field) {
-    if (!this.validator(value)) {
-      throw new ValidationError(
-        this.message.replace('{field}', field).replace('{value}', value),
-        field,
-        value
-      );
-    }
-    return true;
-  }
-}
-
-// String validators
-const stringValidators = {
-  required: new ValidationRule(
-    'required',
-    (value) => value !== null && value !== undefined && value !== '',
-    '{field} is required'
-  ),
-
-  minLength: (min) => new ValidationRule(
-    'minLength',
-    (value) => typeof value === 'string' && value.length >= min,
-    \`{field} must be at least \${min} characters\`
-  ),
-
-  maxLength: (max) => new ValidationRule(
-    'maxLength',
-    (value) => typeof value === 'string' && value.length <= max,
-    \`{field} must be at most \${max} characters\`
-  ),
-
-  pattern: (regex, msg) => new ValidationRule(
-    'pattern',
-    (value) => regex.test(value),
-    msg || '{field} has invalid format'
-  ),
-
-  email: new ValidationRule(
-    'email',
-    (value) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value),
-    '{field} must be a valid email address'
-  ),
-
-  url: new ValidationRule(
-    'url',
-    (value) => {
-      try {
-        new URL(value);
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    '{field} must be a valid URL'
-  ),
-
-  alphanumeric: new ValidationRule(
-    'alphanumeric',
-    (value) => /^[a-zA-Z0-9]+$/.test(value),
-    '{field} must contain only letters and numbers'
-  ),
-
-  alpha: new ValidationRule(
-    'alpha',
-    (value) => /^[a-zA-Z]+$/.test(value),
-    '{field} must contain only letters'
-  ),
-
-  numeric: new ValidationRule(
-    'numeric',
-    (value) => /^[0-9]+$/.test(value),
-    '{field} must contain only numbers'
-  ),
-
-  lowercase: new ValidationRule(
-    'lowercase',
-    (value) => value === value.toLowerCase(),
-    '{field} must be lowercase'
-  ),
-
-  uppercase: new ValidationRule(
-    'uppercase',
-    (value) => value === value.toUpperCase(),
-    '{field} must be uppercase'
-  )
-};
-
-// Number validators
-const numberValidators = {
-  min: (min) => new ValidationRule(
-    'min',
-    (value) => typeof value === 'number' && value >= min,
-    \`{field} must be at least \${min}\`
-  ),
-
-  max: (max) => new ValidationRule(
-    'max',
-    (value) => typeof value === 'number' && value <= max,
-    \`{field} must be at most \${max}\`
-  ),
-
-  positive: new ValidationRule(
-    'positive',
-    (value) => typeof value === 'number' && value > 0,
-    '{field} must be positive'
-  ),
-
-  negative: new ValidationRule(
-    'negative',
-    (value) => typeof value === 'number' && value < 0,
-    '{field} must be negative'
-  ),
-
-  integer: new ValidationRule(
-    'integer',
-    (value) => Number.isInteger(value),
-    '{field} must be an integer'
-  ),
-
-  range: (min, max) => new ValidationRule(
-    'range',
-    (value) => typeof value === 'number' && value >= min && value <= max,
-    \`{field} must be between \${min} and \${max}\`
-  )
-};
-
-// Array validators
-const arrayValidators = {
-  minItems: (min) => new ValidationRule(
-    'minItems',
-    (value) => Array.isArray(value) && value.length >= min,
-    \`{field} must have at least \${min} items\`
-  ),
-
-  maxItems: (max) => new ValidationRule(
-    'maxItems',
-    (value) => Array.isArray(value) && value.length <= max,
-    \`{field} must have at most \${max} items\`
-  ),
-
-  uniqueItems: new ValidationRule(
-    'uniqueItems',
-    (value) => {
-      if (!Array.isArray(value)) return false;
-      const seen = new Set();
-      for (const item of value) {
-        const key = typeof item === 'object' ? JSON.stringify(item) : item;
-        if (seen.has(key)) return false;
-        seen.add(key);
-      }
-      return true;
-    },
-    '{field} must have unique items'
-  ),
-
-  contains: (item) => new ValidationRule(
-    'contains',
-    (value) => Array.isArray(value) && value.includes(item),
-    \`{field} must contain \${item}\`
-  )
-};
-
-// Object validators
-const objectValidators = {
-  hasKeys: (...keys) => new ValidationRule(
-    'hasKeys',
-    (value) => {
-      if (typeof value !== 'object' || value === null) return false;
-      return keys.every(key => key in value);
-    },
-    \`{field} must have keys: \${keys.join(', ')}\`
-  ),
-
-  keysMatch: (pattern) => new ValidationRule(
-    'keysMatch',
-    (value) => {
-      if (typeof value !== 'object' || value === null) return false;
-      return Object.keys(value).every(key => pattern.test(key));
-    },
-    '{field} keys must match pattern'
-  )
-};
-
-// Date validators
-const dateValidators = {
-  before: (date) => new ValidationRule(
-    'before',
-    (value) => new Date(value) < new Date(date),
-    \`{field} must be before \${date}\`
-  ),
-
-  after: (date) => new ValidationRule(
-    'after',
-    (value) => new Date(value) > new Date(date),
-    \`{field} must be after \${date}\`
-  ),
-
-  dateRange: (start, end) => new ValidationRule(
-    'dateRange',
-    (value) => {
-      const d = new Date(value);
-      return d >= new Date(start) && d <= new Date(end);
-    },
-    \`{field} must be between \${start} and \${end}\`
-  )
-};
-
-// Composite validators
-const compositeValidators = {
-  oneOf: (values) => new ValidationRule(
-    'oneOf',
-    (value) => values.includes(value),
-    \`{field} must be one of: \${values.join(', ')}\`
-  ),
-
-  noneOf: (values) => new ValidationRule(
-    'noneOf',
-    (value) => !values.includes(value),
-    \`{field} must not be any of: \${values.join(', ')}\`
-  ),
-
-  equals: (expected) => new ValidationRule(
-    'equals',
-    (value) => value === expected,
-    \`{field} must equal \${expected}\`
-  ),
-
-  notEquals: (expected) => new ValidationRule(
-    'notEquals',
-    (value) => value !== expected,
-    \`{field} must not equal \${expected}\`
-  )
-};
-
-// Schema validator
-class SchemaValidator {
-  constructor(schema) {
-    this.schema = schema;
-  }
-
-  validate(data) {
-    const errors = [];
-
-    for (const [field, rules] of Object.entries(this.schema)) {
-      const value = data[field];
-
-      for (const rule of Array.isArray(rules) ? rules : [rules]) {
-        try {
-          rule.validate(value, field);
-        } catch (error) {
-          if (error instanceof ValidationError) {
-            errors.push(error);
-          } else {
-            throw error;
-          }
-        }
-      }
-    }
-
-    if (errors.length > 0) {
-      const error = new Error('Validation failed');
-      error.name = 'ValidationErrors';
-      error.errors = errors;
-      throw error;
-    }
-
-    return true;
-  }
-
-  validateAsync(data) {
-    return Promise.resolve(this.validate(data));
-  }
-}
-
-// Validator builder
-class ValidatorBuilder {
-  constructor() {
-    this.rules = [];
-  }
-
-  add(rule) {
-    this.rules.push(rule);
-    return this;
-  }
-
-  required() {
-    return this.add(stringValidators.required);
-  }
-
-  minLength(min) {
-    return this.add(stringValidators.minLength(min));
-  }
-
-  maxLength(max) {
-    return this.add(stringValidators.maxLength(max));
-  }
-
-  pattern(regex, msg) {
-    return this.add(stringValidators.pattern(regex, msg));
-  }
-
-  email() {
-    return this.add(stringValidators.email);
-  }
-
-  url() {
-    return this.add(stringValidators.url);
-  }
-
-  min(min) {
-    return this.add(numberValidators.min(min));
-  }
-
-  max(max) {
-    return this.add(numberValidators.max(max));
-  }
-
-  positive() {
-    return this.add(numberValidators.positive);
-  }
-
-  integer() {
-    return this.add(numberValidators.integer);
-  }
-
-  oneOf(values) {
-    return this.add(compositeValidators.oneOf(values));
-  }
-
-  build() {
-    return this.rules;
-  }
-}
-
-function validator() {
-  return new ValidatorBuilder();
-}
-
-module.exports = {
-  ValidationError,
-  ValidationRule,
-  stringValidators,
-  numberValidators,
-  arrayValidators,
-  objectValidators,
-  dateValidators,
-  compositeValidators,
-  SchemaValidator,
-  ValidatorBuilder,
-  validator
-};
-`
-      },
-      {
-        path: 'src/validation/index.js',
-        content: `// Validation module entry point
-const {
-  ValidationError,
-  ValidationRule,
-  stringValidators,
-  numberValidators,
-  arrayValidators,
-  objectValidators,
-  dateValidators,
-  compositeValidators,
-  SchemaValidator,
-  validator
-} = require('./validators');
-
-// Pre-built common schemas
-const commonSchemas = {
-  user: new SchemaValidator({
-    email: [stringValidators.required, stringValidators.email],
-    password: [stringValidators.required, stringValidators.minLength(8)],
-    age: [numberValidators.min(18), numberValidators.max(120)]
-  }),
-
-  post: new SchemaValidator({
-    title: [stringValidators.required, stringValidators.minLength(1), stringValidators.maxLength(200)],
-    content: [stringValidators.required, stringValidators.minLength(10)],
-    tags: [arrayValidators.minItems(1), arrayValidators.maxItems(5)]
-  }),
-
-  product: new SchemaValidator({
-    name: [stringValidators.required, stringValidators.minLength(1)],
-    price: [numberValidators.positive, numberValidators.min(0)],
-    sku: [stringValidators.required, stringValidators.alphanumeric]
-  })
-};
-
-// Validation middleware for Express
-function validationMiddleware(schema) {
-  return (req, res, next) => {
-    try {
-      schema.validate(req.body);
-      next();
-    } catch (error) {
-      if (error.name === 'ValidationErrors') {
-        res.status(400).json({
-          error: 'Validation failed',
-          details: error.errors.map(e => ({
-            field: e.field,
-            message: e.message,
-            value: e.value
-          }))
-        });
-      } else {
-        next(error);
-      }
-    }
-  };
-}
-
-// Sanitization helpers
-const sanitizers = {
-  trim: (str) => typeof str === 'string' ? str.trim() : str,
-  toLowerCase: (str) => typeof str === 'string' ? str.toLowerCase() : str,
-  toUpperCase: (str) => typeof str === 'string' ? str.toUpperCase() : str,
-  removeWhitespace: (str) => typeof str === 'string' ? str.replace(/\\s+/g, '') : str,
-  escapeHtml: (str) => {
-    if (typeof str !== 'string') return str;
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;',
-      '/': '&#x2F;'
-    };
-    return str.replace(/[&<>"'/]/g, (char) => map[char]);
-  },
-  toNumber: (val) => {
-    const num = Number(val);
-    return isNaN(num) ? val : num;
-  },
-  toBoolean: (val) => {
-    if (typeof val === 'boolean') return val;
-    if (typeof val === 'string') {
-      const lower = val.toLowerCase();
-      if (lower === 'true' || lower === '1') return true;
-      if (lower === 'false' || lower === '0') return false;
-    }
-    return Boolean(val);
-  }
-};
-
-module.exports = {
-  ValidationError,
-  ValidationRule,
-  stringValidators,
-  numberValidators,
-  arrayValidators,
-  objectValidators,
-  dateValidators,
-  compositeValidators,
-  SchemaValidator,
-  validator,
-  commonSchemas,
-  validationMiddleware,
-  sanitizers
-};
-`
-      }
-    ]
-  },
-  {
-    name: 'dataProcessingPipeline',
-    description: 'Add data processing pipeline framework',
-    files: [
-      {
-        path: 'src/pipeline/processor.js',
-        content: `// Data Processing Pipeline
-// Framework for building data transformation pipelines
-
-class ProcessingStep {
-  constructor(name, processor, options = {}) {
-    this.name = name;
-    this.processor = processor;
-    this.options = options;
-    this.enabled = options.enabled !== false;
-  }
-
-  async process(data, context) {
-    if (!this.enabled) {
-      return data;
-    }
-
-    try {
-      const result = await this.processor(data, context);
-      return result;
-    } catch (error) {
-      if (this.options.onError === 'skip') {
-        console.warn(\`Step "\${this.name}" failed, skipping:\`, error.message);
-        return data;
-      } else if (this.options.onError === 'default') {
-        return this.options.defaultValue;
-      } else {
-        throw error;
-      }
-    }
-  }
-}
-
-class Pipeline {
-  constructor(name, options = {}) {
-    this.name = name;
-    this.steps = [];
-    this.options = options;
-    this.hooks = {
-      beforePipeline: [],
-      afterPipeline: [],
-      beforeStep: [],
-      afterStep: [],
-      onError: []
-    };
-  }
-
-  addStep(name, processor, options) {
-    const step = new ProcessingStep(name, processor, options);
-    this.steps.push(step);
-    return this;
-  }
-
-  removeStep(name) {
-    this.steps = this.steps.filter(step => step.name !== name);
-    return this;
-  }
-
-  on(event, handler) {
-    if (this.hooks[event]) {
-      this.hooks[event].push(handler);
-    }
-    return this;
-  }
-
-  async runHooks(event, ...args) {
-    for (const handler of this.hooks[event]) {
-      await handler(...args);
-    }
-  }
-
-  async process(data) {
-    const context = {
-      pipeline: this.name,
-      startTime: Date.now(),
-      metadata: {}
-    };
-
-    try {
-      await this.runHooks('beforePipeline', data, context);
-
-      let result = data;
-
-      for (const step of this.steps) {
-        await this.runHooks('beforeStep', result, step, context);
-
-        const stepStartTime = Date.now();
-        result = await step.process(result, context);
-
-        context.metadata[step.name] = {
-          duration: Date.now() - stepStartTime,
-          timestamp: new Date().toISOString()
-        };
-
-        await this.runHooks('afterStep', result, step, context);
-      }
-
-      context.duration = Date.now() - context.startTime;
-      await this.runHooks('afterPipeline', result, context);
-
-      return result;
-    } catch (error) {
-      await this.runHooks('onError', error, data, context);
-      throw error;
-    }
-  }
-
-  async processBatch(dataArray, options = {}) {
-    const { parallel = false, batchSize = 10 } = options;
-
-    if (parallel) {
-      if (batchSize && dataArray.length > batchSize) {
-        const results = [];
-        for (let i = 0; i < dataArray.length; i += batchSize) {
-          const batch = dataArray.slice(i, i + batchSize);
-          const batchResults = await Promise.all(
-            batch.map(item => this.process(item))
-          );
-          results.push(...batchResults);
-        }
-        return results;
-      } else {
-        return Promise.all(dataArray.map(item => this.process(item)));
-      }
-    } else {
-      const results = [];
-      for (const item of dataArray) {
-        results.push(await this.process(item));
-      }
-      return results;
-    }
-  }
-}
-
-// Common processors
-const processors = {
-  // Data transformation
-  map: (fn) => async (data) => {
-    if (Array.isArray(data)) {
-      return data.map(fn);
-    }
-    return fn(data);
-  },
-
-  filter: (predicate) => async (data) => {
-    if (Array.isArray(data)) {
-      return data.filter(predicate);
-    }
-    return predicate(data) ? data : null;
-  },
-
-  flatMap: (fn) => async (data) => {
-    if (Array.isArray(data)) {
-      return data.flatMap(fn);
-    }
-    const result = fn(data);
-    return Array.isArray(result) ? result : [result];
-  },
-
-  sort: (compareFn) => async (data) => {
-    if (Array.isArray(data)) {
-      return [...data].sort(compareFn);
-    }
-    return data;
-  },
-
-  unique: () => async (data) => {
-    if (Array.isArray(data)) {
-      return [...new Set(data)];
-    }
-    return data;
-  },
-
-  // Data validation
-  validate: (schema) => async (data) => {
-    // Assume we have a validation function
-    return data; // Simplified
-  },
-
-  // Data enrichment
-  enrich: (enricher) => async (data, context) => {
-    const enrichment = await enricher(data, context);
-    if (typeof data === 'object' && !Array.isArray(data)) {
-      return { ...data, ...enrichment };
-    }
-    return data;
-  },
-
-  // Data aggregation
-  groupBy: (keyFn) => async (data) => {
-    if (!Array.isArray(data)) return data;
-
-    const groups = {};
-    for (const item of data) {
-      const key = keyFn(item);
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(item);
-    }
-    return groups;
-  },
-
-  reduce: (reducer, initial) => async (data) => {
-    if (Array.isArray(data)) {
-      return data.reduce(reducer, initial);
-    }
-    return data;
-  },
-
-  // Data formatting
-  stringify: () => async (data) => {
-    return JSON.stringify(data, null, 2);
-  },
-
-  parse: () => async (data) => {
-    if (typeof data === 'string') {
-      try {
-        return JSON.parse(data);
-      } catch {
-        return data;
-      }
-    }
-    return data;
-  },
-
-  // Data cleaning
-  trim: () => async (data) => {
-    if (typeof data === 'string') {
-      return data.trim();
-    }
-    if (typeof data === 'object' && !Array.isArray(data)) {
-      const result = {};
-      for (const [key, value] of Object.entries(data)) {
-        result[key] = typeof value === 'string' ? value.trim() : value;
-      }
-      return result;
-    }
-    return data;
-  },
-
-  removeNulls: () => async (data) => {
-    if (Array.isArray(data)) {
-      return data.filter(item => item !== null && item !== undefined);
-    }
-    if (typeof data === 'object') {
-      const result = {};
-      for (const [key, value] of Object.entries(data)) {
-        if (value !== null && value !== undefined) {
-          result[key] = value;
-        }
-      }
-      return result;
-    }
-    return data;
-  },
-
-  // Async operations
-  delay: (ms) => async (data) => {
-    await new Promise(resolve => setTimeout(resolve, ms));
-    return data;
-  },
-
-  retry: (processor, options = {}) => {
-    const { maxRetries = 3, delay = 1000 } = options;
-    return async (data, context) => {
-      let lastError;
-      for (let i = 0; i < maxRetries; i++) {
-        try {
-          return await processor(data, context);
-        } catch (error) {
-          lastError = error;
-          if (i < maxRetries - 1) {
-            await new Promise(resolve => setTimeout(resolve, delay * (i + 1)));
-          }
-        }
-      }
-      throw lastError;
-    };
-  },
-
-  // Conditional processing
-  conditional: (predicate, thenProcessor, elseProcessor) => async (data, context) => {
-    if (await predicate(data, context)) {
-      return thenProcessor ? await thenProcessor(data, context) : data;
-    } else {
-      return elseProcessor ? await elseProcessor(data, context) : data;
-    }
-  },
-
-  // Logging
-  log: (message) => async (data, context) => {
-    console.log(\`[\${context.pipeline}] \${message}\`, data);
-    return data;
-  },
-
-  // Metrics
-  measure: (metricName) => async (data, context) => {
-    const start = Date.now();
-    // Record metric
-    context.metadata[\`metric_\${metricName}\`] = Date.now() - start;
-    return data;
-  }
-};
-
-// Pipeline builder
-class PipelineBuilder {
-  constructor(name) {
-    this.pipeline = new Pipeline(name);
-  }
-
-  step(name, processor, options) {
-    this.pipeline.addStep(name, processor, options);
-    return this;
-  }
-
-  map(fn, options) {
-    return this.step('map', processors.map(fn), options);
-  }
-
-  filter(predicate, options) {
-    return this.step('filter', processors.filter(predicate), options);
-  }
-
-  sort(compareFn, options) {
-    return this.step('sort', processors.sort(compareFn), options);
-  }
-
-  unique(options) {
-    return this.step('unique', processors.unique(), options);
-  }
-
-  groupBy(keyFn, options) {
-    return this.step('groupBy', processors.groupBy(keyFn), options);
-  }
-
-  validate(schema, options) {
-    return this.step('validate', processors.validate(schema), options);
-  }
-
-  log(message, options) {
-    return this.step('log', processors.log(message), options);
-  }
-
-  delay(ms, options) {
-    return this.step('delay', processors.delay(ms), options);
-  }
-
-  build() {
-    return this.pipeline;
-  }
-}
-
-function createPipeline(name) {
-  return new PipelineBuilder(name);
-}
-
-module.exports = {
-  Pipeline,
-  ProcessingStep,
-  PipelineBuilder,
-  createPipeline,
-  processors
-};
-`
-      }
-    ]
-  }
-];
 
 // Select operation type based on weights
 function selectOperationType() {
@@ -1402,37 +537,146 @@ function executeLargerRefactors() {
 
 // Execute big feature operation
 function executeBigFeature() {
-  const selectedFeature = bigFeatures[Math.floor(Math.random() * bigFeatures.length)];
+  console.log('\nAdding big feature: advanced caching system...');
 
-  console.log(\`\\nAdding big feature: \${selectedFeature.name}...\`);
-
-  const addedFiles = [];
-  let totalLines = 0;
-
-  for (const file of selectedFeature.files) {
-    const dir = file.path.substring(0, file.path.lastIndexOf('/'));
-
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-
-    // Write the file
-    fs.writeFileSync(file.path, file.content);
-    const lines = file.content.split('\\n').length;
-    totalLines += lines;
-
-    console.log(\`  ✓ Created \${file.path} (\${lines} lines)\`);
-    addedFiles.push(file.path);
+  const featureCode = `// Advanced Caching System
+class CacheManager {
+  constructor(options = {}) {
+    this.maxSize = options.maxSize || 1000;
+    this.ttl = options.ttl || 3600000;
+    this.cache = new Map();
+    this.timestamps = new Map();
   }
 
-  console.log(\`\\nTotal lines added: \${totalLines}\`);
+  set(key, value, ttl = this.ttl) {
+    if (this.cache.size >= this.maxSize) {
+      const oldestKey = this.cache.keys().next().value;
+      this.cache.delete(oldestKey);
+      this.timestamps.delete(oldestKey);
+    }
+    this.cache.set(key, value);
+    this.timestamps.set(key, Date.now() + ttl);
+  }
+
+  get(key) {
+    if (!this.cache.has(key)) return null;
+    const expiry = this.timestamps.get(key);
+    if (Date.now() > expiry) {
+      this.cache.delete(key);
+      this.timestamps.delete(key);
+      return null;
+    }
+    return this.cache.get(key);
+  }
+
+  has(key) {
+    return this.get(key) !== null;
+  }
+
+  delete(key) {
+    this.cache.delete(key);
+    this.timestamps.delete(key);
+  }
+
+  clear() {
+    this.cache.clear();
+    this.timestamps.clear();
+  }
+
+  size() {
+    this.cleanup();
+    return this.cache.size;
+  }
+
+  cleanup() {
+    const now = Date.now();
+    for (const [key, expiry] of this.timestamps.entries()) {
+      if (now > expiry) {
+        this.cache.delete(key);
+        this.timestamps.delete(key);
+      }
+    }
+  }
+
+  keys() {
+    this.cleanup();
+    return Array.from(this.cache.keys());
+  }
+
+  values() {
+    this.cleanup();
+    return Array.from(this.cache.values());
+  }
+
+  entries() {
+    this.cleanup();
+    return Array.from(this.cache.entries());
+  }
+}
+
+class LRUCache extends CacheManager {
+  constructor(options) {
+    super(options);
+    this.accessOrder = [];
+  }
+
+  get(key) {
+    const value = super.get(key);
+    if (value !== null) {
+      const index = this.accessOrder.indexOf(key);
+      if (index > -1) {
+        this.accessOrder.splice(index, 1);
+      }
+      this.accessOrder.push(key);
+    }
+    return value;
+  }
+
+  set(key, value, ttl) {
+    if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
+      const lruKey = this.accessOrder.shift();
+      this.cache.delete(lruKey);
+      this.timestamps.delete(lruKey);
+    }
+    super.set(key, value, ttl);
+    this.accessOrder.push(key);
+  }
+}
+
+function memoize(fn, options = {}) {
+  const cache = new CacheManager(options);
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+module.exports = { CacheManager, LRUCache, memoize };
+`;
+
+  const filePath = 'src/advanced/cache.js';
+  const dir = 'src/advanced';
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  fs.writeFileSync(filePath, featureCode);
+  const lines = featureCode.split('\n').length;
+
+  console.log(`  ✓ Created ${filePath} (${lines} lines)`);
+  console.log(`\nTotal lines added: ${lines}`);
 
   return {
-    feature: selectedFeature.name,
-    description: selectedFeature.description,
-    files: addedFiles,
-    lines: totalLines
+    feature: 'caching-system',
+    description: 'advanced caching system with LRU support',
+    files: [filePath],
+    lines: lines
   };
 }
 
