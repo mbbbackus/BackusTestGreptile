@@ -124,6 +124,17 @@ function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -143,4 +154,6 @@ module.exports = {
   sleep,
   omit,
   randomInt,
-  isObject};
+  isObject,
+  isEmail,
+  sleep};

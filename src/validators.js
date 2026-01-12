@@ -132,6 +132,14 @@ function truncate(str, length) {
 module.exports = {
   truncate
 ,
+
+function omit(obj, keys) {
+  const result = { ...obj ,
+  omit};
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   truncate,
   flatten,

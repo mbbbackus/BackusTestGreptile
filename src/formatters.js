@@ -86,6 +86,16 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 module.exports = {
   camelCase
 ,
@@ -100,4 +110,6 @@ module.exports = {
   memoize,
   chunk,
   unique,
-  sleep};
+  sleep,
+  truncate,
+  isObject};
