@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const { execSync } = require('child_process');
+const https = require('https');
 
 // Utility function templates that can be generated
 const utilityFunctions = [
@@ -161,7 +162,63 @@ const utilityFunctions = [
   }
 ];
 
-function main() {
+async function generatePRTitle(selectedFunctions) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    console.log('⚠️  ANTHROPIC_API_KEY not found, using default title');
+    return `Add ${selectedFunctions.length} utility functions`;
+  }
+
+  const functionList = selectedFunctions.map(f => `- ${f.name}`).join('\n');
+
+  const requestBody = JSON.stringify({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 100,
+    messages: [{
+      role: 'user',
+      content: `Generate a concise, descriptive PR title (max 60 characters) for adding these utility functions to a JavaScript library:\n${functionList}\n\nTitle should describe what category/purpose these utilities serve. Return ONLY the title, no quotes or extra text.`
+    }]
+  });
+
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.anthropic.com',
+      path: '/v1/messages',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'Content-Length': Buffer.byteLength(requestBody)
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => data += chunk);
+      res.on('end', () => {
+        try {
+          const response = JSON.parse(data);
+          const title = response.content[0].text.trim();
+          resolve(title);
+        } catch (error) {
+          console.log('⚠️  Failed to parse API response, using default title');
+          resolve(`Add ${selectedFunctions.length} utility functions`);
+        }
+      });
+    });
+
+    req.on('error', (error) => {
+      console.log('⚠️  API request failed, using default title');
+      resolve(`Add ${selectedFunctions.length} utility functions`);
+    });
+
+    req.write(requestBody);
+    req.end();
+  });
+}
+
+async function main() {
   // Generate a random branch name
   const timestamp = Date.now();
   const branchName = `feature/add-utilities-${timestamp}`;
@@ -234,13 +291,17 @@ ${selectedFunctions.map(f => `- ${f.name}`).join('\n')}`;
   console.log(`\nRemote URL: ${remoteUrl}`);
 
   // Try to create PR with gh
+  console.log('\nGenerating PR title with LLM...');
+  const prTitle = await generatePRTitle(selectedFunctions);
+  console.log(`Generated title: ${prTitle}`);
+
   console.log('\nAttempting to create pull request...');
 
   try {
     const description = `This PR adds ${numFunctions} new utility functions to enhance our utilities library:\n\n${selectedFunctions.map(f => `- ${f.name}`).join('\n')}\n\nThese utilities provide commonly used helper functions for TypeScript/JavaScript projects.`;
 
     const prOutput = execSync(
-      `gh pr create --title "Add ${numFunctions} utility functions" --body "${description}" --base main`,
+      `gh pr create --title "${prTitle}" --body "${description}" --base main`,
       { encoding: 'utf-8' }
     );
 
@@ -262,4 +323,7 @@ ${selectedFunctions.map(f => `- ${f.name}`).join('\n')}`;
   }
 }
 
-main();
+main().catch(error => {
+  console.error('Error:', error.message);
+  process.exit(1);
+});
