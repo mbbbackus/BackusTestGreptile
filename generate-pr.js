@@ -300,8 +300,12 @@ ${selectedFunctions.map(f => `- ${f.name}`).join('\n')}`;
   try {
     const description = `This PR adds ${numFunctions} new utility functions to enhance our utilities library:\n\n${selectedFunctions.map(f => `- ${f.name}`).join('\n')}\n\nThese utilities provide commonly used helper functions for TypeScript/JavaScript projects.`;
 
+    // Escape double quotes in title and description for shell command
+    const escapedTitle = prTitle.replace(/"/g, '\\"');
+    const escapedDescription = description.replace(/"/g, '\\"');
+
     const prOutput = execSync(
-      `gh pr create --title "${prTitle}" --body "${description}" --base main`,
+      `gh pr create --title "${escapedTitle}" --body "${escapedDescription}" --base main`,
       { encoding: 'utf-8' }
     );
 
