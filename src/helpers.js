@@ -73,6 +73,18 @@ function throttle(func, limit) {
   };
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 module.exports = {
   memoize
 ,
@@ -82,4 +94,6 @@ module.exports = {
   flatten,
   sleep,
   throttle
-  throttle};
+  throttle,
+  flatten,
+  sleep};

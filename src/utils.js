@@ -104,6 +104,23 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -120,4 +137,6 @@ module.exports = {
   merge,
   deepClone,
   camelCase,
-  sleep};
+  sleep,
+  deepClone,
+  throttle};

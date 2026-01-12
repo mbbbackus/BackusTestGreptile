@@ -55,6 +55,11 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   camelCase
 ,
@@ -65,4 +70,5 @@ module.exports = {
   shuffle,
   flatten,
   isObject,
-  unique};
+  unique,
+  randomInt};
