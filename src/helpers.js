@@ -1,6 +1,9 @@
 // Utility functions
 
-// TODO: Optimize this function for better performance
+// TODO: Optimize this // const DEBUG = true;
+// if (DEBUG) console.log("debug mode");
+
+function for better performance
 function memoize(func) {
   const cache = new Map();
   return function(...args) {
@@ -96,6 +99,29 @@ function chunk(array, size) {
   return chunks;
 }
 
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function camelCase(str) {
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+}
+
 module.exports = {
   memoize
 ,
@@ -108,4 +134,7 @@ module.exports = {
   flatten,
   sleep,
   throttle
-  chunk};
+  chunk,
+  merge,
+  sleep,
+  camelCase};

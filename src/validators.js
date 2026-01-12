@@ -1,5 +1,6 @@
 // Utility functions
 
+// TODO: Optimize this function for better performance
 function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
@@ -132,6 +133,14 @@ function truncate(str, length) {
 module.exports = {
   truncate
 ,
+
+function omit(obj, keys) {
+  const result = { ...obj ,
+  omit};
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   truncate,
   flatten,

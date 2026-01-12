@@ -6,6 +6,8 @@
 // const testValue = 42;
 
 function formatDate(date) {
+  console.log('DEBUG: Entering formatDate');
+
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
@@ -124,6 +126,34 @@ function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -143,4 +173,8 @@ module.exports = {
   sleep,
   omit,
   randomInt,
-  isObject};
+  isObject,
+  isEmail,
+  sleep,
+  truncate,
+  throttle};
