@@ -104,6 +104,13 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -120,4 +127,5 @@ module.exports = {
   merge,
   deepClone,
   camelCase,
-  sleep};
+  sleep,
+  omit};

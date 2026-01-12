@@ -73,6 +73,11 @@ function throttle(func, limit) {
   };
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   memoize
 ,
@@ -82,4 +87,5 @@ module.exports = {
   flatten,
   sleep,
   throttle
-  throttle};
+  throttle,
+  deepClone};
