@@ -614,8 +614,12 @@ async function main() {
   try {
     const description = generatePRDescription(operationType, details);
 
+    // Escape double quotes in title and description for shell command
+    const escapedTitle = prTitle.replace(/"/g, '\\"');
+    const escapedDescription = description.replace(/"/g, '\\"');
+
     const prOutput = execSync(
-      `gh pr create --title "${prTitle}" --body "${description}" --base main`,
+      `gh pr create --title "${escapedTitle}" --body "${escapedDescription}" --base main`,
       { encoding: 'utf-8' }
     );
 
