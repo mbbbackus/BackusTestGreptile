@@ -97,19 +97,19 @@ function isObject(value) {
 }
 
 module.exports = {
-  camelCase
-,
-  omit,
-  randomInt,
-  flatten,
+  camelCase,
+  chunk,
   deepClone,
-  shuffle,
+  flatten,
   flatten,
   isObject,
-  unique,
+  isObject,
   memoize,
-  chunk,
-  unique,
+  omit,
+  randomInt,
+  shuffle,
   sleep,
   truncate,
-  isObject};
+  unique,
+  unique
+};
