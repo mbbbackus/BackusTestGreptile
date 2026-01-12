@@ -67,6 +67,18 @@ function memoize(func) {
   };
 }
 
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
 module.exports = {
   camelCase
 ,
@@ -78,4 +90,6 @@ module.exports = {
   flatten,
   isObject,
   unique,
-  memoize};
+  memoize,
+  isObject,
+  kebabCase};

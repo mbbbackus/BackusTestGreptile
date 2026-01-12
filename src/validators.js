@@ -99,6 +99,16 @@ function throttle(func, limit) {
   };
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   truncate
 ,
@@ -114,4 +124,6 @@ module.exports = {
   kebabCase,
   truncate,
   omit,
-  throttle};
+  throttle,
+  deepClone,
+  randomInt};
