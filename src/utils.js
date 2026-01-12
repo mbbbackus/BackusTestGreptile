@@ -121,6 +121,15 @@ function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -139,4 +148,5 @@ module.exports = {
   camelCase,
   sleep,
   throttle,
-  isObject};
+  isObject,
+  chunk};

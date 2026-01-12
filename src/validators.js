@@ -105,6 +105,21 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   truncate
 ,
@@ -119,4 +134,6 @@ module.exports = {
   isObject,
   memoize,
   chunk,
-  randomInt};
+  randomInt,
+  pick,
+  flatten};

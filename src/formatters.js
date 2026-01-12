@@ -103,6 +103,11 @@ function throttle(func, limit) {
   };
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   camelCase
 ,
@@ -118,4 +123,5 @@ module.exports = {
   merge,
   kebabCase,
   pick,
-  throttle};
+  throttle,
+  deepClone};
