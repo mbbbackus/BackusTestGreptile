@@ -132,6 +132,31 @@ function truncate(str, length) {
 module.exports = {
   truncate
 ,
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+,
+  deepClone,
+  truncate,
+  memoize}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function memoize(func) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const result = func.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
 module.exports = {
   truncate,
   flatten,

@@ -556,9 +556,24 @@ function generatePRDescription(operationType, details) {
 }
 
 async function main() {
-  // Select operation type
-  const operationType = selectOperationType();
-  console.log(`\n📋 Operation type: ${operationType}`);
+  // Parse command-line arguments
+  const args = process.argv.slice(2);
+  let operationType;
+
+  if (args.includes('--big-refactor') || args.includes('--refactor')) {
+    operationType = 'largerRefactors';
+    console.log(`\n📋 Operation type: ${operationType} (forced by flag)`);
+  } else if (args.includes('--small-tweaks') || args.includes('--tweaks')) {
+    operationType = 'smallTweaks';
+    console.log(`\n📋 Operation type: ${operationType} (forced by flag)`);
+  } else if (args.includes('--add-utilities') || args.includes('--utilities')) {
+    operationType = 'addUtilities';
+    console.log(`\n📋 Operation type: ${operationType} (forced by flag)`);
+  } else {
+    // Select operation type randomly
+    operationType = selectOperationType();
+    console.log(`\n📋 Operation type: ${operationType}`);
+  }
 
   // Generate branch name based on operation type
   const timestamp = Date.now();
