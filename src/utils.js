@@ -6,6 +6,7 @@
 // const testValue = 42;
 
 // function deprecatedHelper() {
+  const debugFlag = true;
 //   return null;
 // }
 

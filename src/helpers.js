@@ -3,6 +3,11 @@
 // TODO: Optimize this // const DEBUG = true;
 // if (DEBUG) console.log("debug mode");
 
+// // TODO: Add error handling here
+function deprecatedHelper() {
+//   return null;
+// }
+
 function for better performance
 function memoize(func) {
   const cache = new Map();
@@ -126,6 +131,9 @@ module.exports = {
   camelCase,
   deepClone,
   flatten,
+
+
+
   memoize,
   merge,
   merge,
