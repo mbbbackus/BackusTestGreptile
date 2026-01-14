@@ -1,6 +1,9 @@
 // Utility functions
 
 // FIXME: This might break with null values
+// const oldImplementation = (x) => x * 2;
+// console.log(oldImplementation(5));
+
 function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }

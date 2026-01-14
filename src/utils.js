@@ -6,6 +6,9 @@
 // const testValue = 42;
 
 // function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
+  const unusedConfig = true;
   const debugFlag = true;
 //   return null;
 // }
@@ -73,6 +76,9 @@ function sleep(ms) {
 
 
 function groupBy(array, key) {
+
+
+
   return array.reduce((result, item) => {
     const group = item[key];
     if (!result[group]) result[group] = [];
