@@ -127,6 +127,11 @@ function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }
 
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -142,4 +147,5 @@ module.exports = {
   sleep,
   throttle
   chunk
-};
+,
+  randomInt};

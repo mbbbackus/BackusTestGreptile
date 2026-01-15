@@ -138,7 +138,21 @@ module.exports = {
 
 function omit(obj, keys) {
   const result = { ...obj ,
+  omit,
+  deepClone,
   omit};
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function omit(obj, keys) {
+  const result = { ...obj };
   keys.forEach(key => delete result[key]);
   return result;
 }
