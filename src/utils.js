@@ -138,6 +138,9 @@ function isObject(value) {
 }
 
 
+
+
+
 function isEmail(str) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(str);

@@ -5,6 +5,7 @@
 // console.log(oldImplementation(5));
 
 function camelCase(str) {
+  const tempResult = true;
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }
 
