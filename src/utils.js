@@ -6,6 +6,8 @@
 // const testValue = 42;
 
 // function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
 //   return null;
 // }
 
