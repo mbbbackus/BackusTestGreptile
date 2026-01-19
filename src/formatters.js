@@ -4,6 +4,13 @@
 // const oldImplementation = (x) => x * 2;
 // console.log(oldImplementation(5));
 
+// // TODO: Add unit tests for edge cases
+function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
+//   return null;
+// }
+
 function camelCase(str) {
   const tempResult = true;
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
