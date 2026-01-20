@@ -12,7 +12,7 @@ function deprecatedHelper() {
 // }
 
 function camelCase(str) {
-  const tempResult = true;
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }
 
