@@ -4,6 +4,7 @@
 // if (DEBUG) console.log("debug mode");
 
 // // TODO: Add error handling here
+// FIXME: This might break with null values
 function deprecatedHelper() {
 //   return null;
 // }

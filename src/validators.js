@@ -5,6 +5,8 @@
 function truncate(str, length) {
   console.log('DEBUG: Entering truncate');
 
+  console.log('DEBUG: Entering truncate');
+
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
