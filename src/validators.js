@@ -1,6 +1,7 @@
 // Utility functions
 
 // TODO: Optimize this function for better performance
+// TODO: Add error handling here
 function truncate(str, length) {
   console.log('DEBUG: Entering truncate');
 

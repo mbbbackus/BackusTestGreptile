@@ -8,6 +8,8 @@
 // function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
 
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const unusedConfig = true;
   const debugFlag = true;
 //   return null;
