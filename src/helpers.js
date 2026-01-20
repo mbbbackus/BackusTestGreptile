@@ -143,6 +143,6 @@ module.exports = {
   randomInt,
   sleep,
   sleep,
-  throttle
+  throttle,
   chunk
 };
