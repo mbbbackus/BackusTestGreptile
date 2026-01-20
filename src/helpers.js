@@ -136,16 +136,13 @@ module.exports = {
   camelCase,
   deepClone,
   flatten,
-
-
-
   memoize,
   merge,
   merge,
   pick,
+  randomInt,
   sleep,
   sleep,
   throttle
   chunk
-,
-  randomInt};
+};
