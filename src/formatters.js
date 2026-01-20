@@ -5,6 +5,10 @@
 // console.log(oldImplementation(5));
 
 // // TODO: Add unit tests for edge cases
+// function deprecatedHelper() {
+//   return null;
+// }
+
 function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
 
