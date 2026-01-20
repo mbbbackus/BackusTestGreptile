@@ -3,6 +3,11 @@
 // TODO: Optimize this // const DEBUG = true;
 // if (DEBUG) console.log("debug mode");
 
+// // TODO: Add error handling here
+function deprecatedHelper() {
+//   return null;
+// }
+
 function for better performance
 function memoize(func) {
   const cache = new Map();
@@ -122,10 +127,18 @@ function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }
 
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   camelCase,
   deepClone,
   flatten,
+
+
+
   memoize,
   merge,
   merge,
@@ -134,4 +147,5 @@ module.exports = {
   sleep,
   throttle
   chunk
-};
+,
+  randomInt};

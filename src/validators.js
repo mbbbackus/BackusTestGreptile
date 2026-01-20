@@ -112,6 +112,9 @@ function merge(target, source) {
 
 
 function shuffle(array) {
+
+
+
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -138,7 +141,21 @@ module.exports = {
 
 function omit(obj, keys) {
   const result = { ...obj ,
+  omit,
+  deepClone,
   omit};
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function omit(obj, keys) {
+  const result = { ...obj };
   keys.forEach(key => delete result[key]);
   return result;
 }
