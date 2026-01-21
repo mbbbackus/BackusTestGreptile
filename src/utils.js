@@ -181,6 +181,12 @@ function shuffle(array) {
   return shuffled;
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -205,4 +211,5 @@ module.exports = {
   sleep,
   truncate,
   throttle,
-  shuffle};
+  shuffle,
+  isEmail};
