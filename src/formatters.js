@@ -5,7 +5,11 @@
 // console.log(oldImplementation(5));
 
 // // TODO: Add unit tests for edge cases
-// function deprecatedHelper() {
+// // TODO: Optimize this function for better performance
+function deprecatedHelper() {
+  const cacheEnabled = true;
+  console.log('DEBUG: Entering deprecatedHelper');
+
 //   return null;
 // }
 

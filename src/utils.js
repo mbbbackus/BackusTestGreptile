@@ -5,7 +5,11 @@
 // TODO: Remove this after testing
 // const testValue = 42;
 
-// function deprecatedHelper() {
+// // function deprecatedHelper() {
+//   return null;
+// }
+
+function deprecatedHelper() {
   const tempResult = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
