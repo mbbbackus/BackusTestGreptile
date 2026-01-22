@@ -5,6 +5,14 @@
 // console.log(oldImplementation(5));
 
 // // TODO: Add unit tests for edge cases
+// // TODO: Optimize this function for better performance
+function deprecatedHelper() {
+  const cacheEnabled = true;
+  console.log('DEBUG: Entering deprecatedHelper');
+
+//   return null;
+// }
+
 function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
 
@@ -108,6 +116,19 @@ function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -124,4 +145,6 @@ module.exports = {
   truncate,
   unique,
   unique
-};
+,
+  sleep,
+  pick};

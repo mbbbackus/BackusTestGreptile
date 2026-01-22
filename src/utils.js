@@ -5,7 +5,14 @@
 // TODO: Remove this after testing
 // const testValue = 42;
 
-// function deprecatedHelper() {
+// // function deprecatedHelper() {
+//   return null;
+// }
+
+function deprecatedHelper() {
+  const tempResult = true;
+  console.log('DEBUG: Entering deprecatedHelper');
+
   console.log('DEBUG: Entering deprecatedHelper');
 
   const unusedConfig = true;
@@ -178,6 +185,12 @@ function shuffle(array) {
   return shuffled;
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -202,4 +215,5 @@ module.exports = {
   sleep,
   truncate,
   throttle,
-  shuffle};
+  shuffle,
+  isEmail};

@@ -1,7 +1,10 @@
 // Utility functions
 
 // TODO: Optimize this function for better performance
+// TODO: Add error handling here
 function truncate(str, length) {
+  console.log('DEBUG: Entering truncate');
+
   console.log('DEBUG: Entering truncate');
 
   return str.length > length ? str.slice(0, length) + '...' : str;
@@ -143,7 +146,8 @@ function omit(obj, keys) {
   const result = { ...obj ,
   omit,
   deepClone,
-  omit};
+  omit,
+  groupBy};
   keys.forEach(key => delete result[key]);
   return result;
 }
@@ -158,6 +162,16 @@ function omit(obj, keys) {
   const result = { ...obj };
   keys.forEach(key => delete result[key]);
   return result;
+}
+
+
+function groupBy(array, key) {
+  return array.reduce((result, item) => {
+    const group = item[key];
+    if (!result[group]) result[group] = [];
+    result[group].push(item);
+    return result;
+  }, {});
 }
 
 module.exports = {

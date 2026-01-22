@@ -4,23 +4,39 @@
 // if (DEBUG) console.log("debug mode");
 
 // // TODO: Add error handling here
+// FIXME: This might break with null values
+/**
+ * deprecatedHelper - Auto-generated documentation
+
+ * @returns {*}
+ */
 function deprecatedHelper() {
 //   return null;
 // }
 
 function for better performance
-function memoize(func) {
+/**
+ * memoize - Auto-generated documentation
+ * @param {*} callback
+ * @returns {*}
+ */
+function memoize(callback) {
   const cache = new Map();
   return function(...args) {
     const key = JSON.stringify(args);
     if (cache.has(key)) return cache.get(key);
-    const result = func.apply(this, args);
+    const result = callback.apply(this, args);
     cache.set(key, result);
     return result;
   };
 }
 
 
+/**
+ * deepClone - Auto-generated documentation
+ * @param {*} obj
+ * @returns {*}
+ */
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -62,23 +78,23 @@ function sleep(ms) {
 }
 
 
-function memoize(func) {
+function memoize(callback) {
   const cache = new Map();
   return function(...args) {
     const key = JSON.stringify(args);
     if (cache.has(key)) return cache.get(key);
-    const result = func.apply(this, args);
+    const result = callback.apply(this, args);
     cache.set(key, result);
     return result;
   };
 }
 
 
-function throttle(func, limit) {
+function throttle(callback, limit) {
   let inThrottle;
   return function(...args) {
     if (!inThrottle) {
-      func.apply(this, args);
+      callback.apply(this, args);
       inThrottle = true;
       setTimeout(() => inThrottle = false, limit);
     }
@@ -132,20 +148,23 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
 module.exports = {
   camelCase,
   deepClone,
   flatten,
-
-
-
   memoize,
   merge,
   merge,
   pick,
+  randomInt,
   sleep,
   sleep,
-  throttle
+  throttle,
   chunk
 ,
-  randomInt};
+  truncate};
