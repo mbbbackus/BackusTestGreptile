@@ -153,6 +153,40 @@ function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -167,4 +201,7 @@ module.exports = {
   throttle,
   chunk
 ,
-  truncate};
+  truncate,
+  merge,
+  chunk,
+  throttle};
