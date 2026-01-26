@@ -10,6 +10,9 @@
 
  * @returns {*}
  */
+// const DEBUG = true;
+// if (DEBUG) console.log("debug mode");
+
 function deprecatedHelper() {
 //   return null;
 // }

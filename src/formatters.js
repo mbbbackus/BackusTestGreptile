@@ -7,6 +7,7 @@
 // // TODO: Add unit tests for edge cases
 // // TODO: Optimize this function for better performance
 function deprecatedHelper() {
+  const legacyMode = true;
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
