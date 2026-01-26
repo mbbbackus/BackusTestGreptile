@@ -129,6 +129,13 @@ function pick(obj, keys) {
   }, {});
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -147,4 +154,5 @@ module.exports = {
   unique
 ,
   sleep,
-  pick};
+  pick,
+  flatten};

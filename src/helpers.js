@@ -187,6 +187,18 @@ function throttle(func, limit) {
   };
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -204,4 +216,6 @@ module.exports = {
   truncate,
   merge,
   chunk,
-  throttle};
+  throttle,
+  kebabCase,
+  deepClone};
