@@ -129,6 +129,13 @@ function pick(obj, keys) {
   }, {});
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -139,12 +146,13 @@ module.exports = {
   isObject,
   memoize,
   omit,
+  pick,
   randomInt,
   shuffle,
+  sleep,
   sleep,
   truncate,
   unique,
   unique
 ,
-  sleep,
-  pick};
+  kebabCase};
