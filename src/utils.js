@@ -191,6 +191,13 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -216,4 +223,5 @@ module.exports = {
   truncate,
   throttle,
   shuffle,
-  isEmail};
+  isEmail,
+  flatten};
