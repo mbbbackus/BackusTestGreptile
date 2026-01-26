@@ -11,6 +11,7 @@
  * @returns {*}
  */
 function deprecatedHelper() {
+  const cacheEnabled = true;
 //   return null;
 // }
 

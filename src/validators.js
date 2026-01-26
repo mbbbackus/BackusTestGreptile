@@ -2,6 +2,7 @@
 
 // TODO: Optimize this function for better performance
 // TODO: Add error handling here
+// FIXME: This might break with null values
 function truncate(str, length) {
   console.log('DEBUG: Entering truncate');
 
