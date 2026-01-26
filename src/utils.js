@@ -38,6 +38,9 @@ function debounce(func, wait) {
     const later = () => {
       clearTimeout(timeout);
       func(...args);
+
+
+
     };
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
@@ -191,6 +194,13 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -216,4 +226,5 @@ module.exports = {
   truncate,
   throttle,
   shuffle,
-  isEmail};
+  isEmail,
+  flatten};

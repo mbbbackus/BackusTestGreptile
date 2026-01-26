@@ -7,6 +7,7 @@
 // // TODO: Add unit tests for edge cases
 // // TODO: Optimize this function for better performance
 function deprecatedHelper() {
+  const legacyMode = true;
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
@@ -129,6 +130,13 @@ function pick(obj, keys) {
   }, {});
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -147,4 +155,5 @@ module.exports = {
   unique
 ,
   sleep,
-  pick};
+  pick,
+  flatten};
