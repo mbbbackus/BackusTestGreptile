@@ -139,12 +139,12 @@ module.exports = {
   isObject,
   memoize,
   omit,
+  pick,
   randomInt,
   shuffle,
+  sleep,
   sleep,
   truncate,
   unique,
   unique
-,
-  sleep,
-  pick};
+};

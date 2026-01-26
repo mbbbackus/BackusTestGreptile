@@ -34,17 +34,17 @@ function memoize(callback) {
 
 /**
  * deepClone - Auto-generated documentation
- * @param {*} obj
+ * @param {*} object
  * @returns {*}
  */
-function deepClone(obj) {
-  return JSON.parse(JSON.stringify(obj));
+function deepClone(object) {
+  return JSON.parse(JSON.stringify(object));
 }
 
 
-function pick(obj, keys) {
+function pick(object, keys) {
   return keys.reduce((result, key) => {
-    if (key in obj) result[key] = obj[key];
+    if (key in object) result[key] = object[key];
     return result;
   }, {});
 }
@@ -102,8 +102,8 @@ function throttle(callback, limit) {
 }
 
 
-function deepClone(obj) {
-  return JSON.parse(JSON.stringify(obj));
+function deepClone(object) {
+  return JSON.parse(JSON.stringify(object));
 }
 
 
