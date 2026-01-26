@@ -32,12 +32,12 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function debounce(func, wait) {
+function debounce(callback, wait) {
   let timeout;
   return function executedFunction(...args) {
     const later = () => {
       clearTimeout(timeout);
-      func(...args);
+      callback(...args);
     };
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
@@ -164,11 +164,11 @@ function truncate(str, length) {
 }
 
 
-function throttle(func, limit) {
+function throttle(callback, limit) {
   let inThrottle;
   return function(...args) {
     if (!inThrottle) {
-      func.apply(this, args);
+      callback.apply(this, args);
       inThrottle = true;
       setTimeout(() => inThrottle = false, limit);
     }

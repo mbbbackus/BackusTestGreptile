@@ -139,15 +139,15 @@ function truncate(str, length) {
 }
 
 module.exports = {
-  truncate
-,
-
-function omit(obj, keys) {
-  const result = { ...obj ,
-  omit,
   deepClone,
+  function omit(obj,
+  groupBy,
+  keys) {
+  const result = { ...obj,
   omit,
-  groupBy};
+  omit,
+  truncate
+};
   keys.forEach(key => delete result[key]);
   return result;
 }
