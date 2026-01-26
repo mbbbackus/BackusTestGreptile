@@ -1,6 +1,9 @@
 // Utility functions
 
-// TODO: Optimize this function for better performance
+// TODO: Optimize this // TODO: Remove this after testing
+// const testValue = 42;
+
+function for better performance
 // TODO: Add error handling here
 // FIXME: This might break with null values
 function truncate(str, length) {
