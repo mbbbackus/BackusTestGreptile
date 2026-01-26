@@ -153,6 +153,22 @@ function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -167,4 +183,7 @@ module.exports = {
   throttle,
   chunk
 ,
-  truncate};
+  truncate,
+  isEmail,
+  randomInt,
+  deepClone};
