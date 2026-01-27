@@ -9,6 +9,16 @@
 // console.log(oldImplementation(5));
 
 function for better performance
+/**
+ * deprecatedHelper - Auto-generated documentation
+
+ * @returns {*}
+ */
+/**
+ * deprecatedHelper - Auto-generated documentation
+
+ * @returns {*}
+ */
 function deprecatedHelper() {
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
@@ -22,6 +32,11 @@ function deprecatedHelper() {
 //   return null;
 // }
 
+/**
+ * camelCase - Auto-generated documentation
+ * @param {*} str
+ * @returns {*}
+ */
 function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');

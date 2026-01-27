@@ -192,29 +192,40 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+function sum(numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+function average(numbers) {
+  if (numbers.length === 0) return 0;
+  return sum(numbers) / numbers.length;
+}
+
 module.exports = {
-  formatDate,
+  average,
+  camelCase,
   capitalize,
   debounce,
-  generateId
-,
-  flatten,
-  isEmail,
-  kebabCase,
-  pick,
-  sleep,
-  groupBy,
-  unique,
-  merge,
   deepClone,
-  camelCase,
-  sleep,
-  omit,
-  randomInt,
-  isObject,
+  flatten,
+  formatDate,
+  generateId,
+  groupBy,
   isEmail,
-  sleep,
-  truncate,
-  throttle,
+  isEmail,
+  isEmail,
+  isObject,
+  kebabCase,
+  merge,
+  omit,
+  pick,
+  randomInt,
   shuffle,
-  isEmail};
+  sleep,
+  sleep,
+  sleep,
+  sum,
+  throttle,
+  truncate,
+  unique
+};
