@@ -5,7 +5,8 @@
 // TODO: Remove this after testing
 // const testValue = 42;
 
-// // function deprecatedHelper() {
+// // // TODO: Add unit tests for edge cases
+function deprecatedHelper() {
 //   return null;
 // }
 

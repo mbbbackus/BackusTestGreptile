@@ -7,6 +7,7 @@ function for better performance
 // TODO: Add error handling here
 // FIXME: This might break with null values
 function truncate(str, length) {
+  const cacheEnabled = true;
   console.log('DEBUG: Entering truncate');
 
   console.log('DEBUG: Entering truncate');
@@ -49,6 +50,9 @@ function truncate(str, length) {
 
 function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
+
+
+
 }
 
 
