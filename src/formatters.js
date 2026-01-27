@@ -132,6 +132,11 @@ function pick(obj, keys) {
   }, {});
 }
 
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -150,4 +155,5 @@ module.exports = {
   truncate,
   unique,
   unique
-};
+,
+  unique};
