@@ -10,7 +10,9 @@
 
  * @returns {*}
  */
+// TODO: Consider caching this result
 function deprecatedHelper() {
+  const cacheEnabled = true;
 //   return null;
 // }
 
@@ -54,6 +56,9 @@ function merge(target, source) {
   const result = { ...target };
   Object.keys(source).forEach(key => {
     if (isObject(source[key]) && isObject(result[key])) {
+
+
+
       result[key] = merge(result[key], source[key]);
     } else {
       result[key] = source[key];

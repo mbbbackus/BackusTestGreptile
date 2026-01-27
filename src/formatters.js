@@ -5,7 +5,10 @@
 // console.log(oldImplementation(5));
 
 // // TODO: Add unit tests for edge cases
-// // TODO: Optimize this function for better performance
+// // TODO: Optimize this // const oldImplementation = (x) => x * 2;
+// console.log(oldImplementation(5));
+
+function for better performance
 function deprecatedHelper() {
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
@@ -139,12 +142,12 @@ module.exports = {
   isObject,
   memoize,
   omit,
+  pick,
   randomInt,
   shuffle,
+  sleep,
   sleep,
   truncate,
   unique,
   unique
-,
-  sleep,
-  pick};
+};
