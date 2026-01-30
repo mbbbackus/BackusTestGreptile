@@ -8,6 +8,9 @@
 // // TODO: Optimize this // const oldImplementation = (x) => x * 2;
 // console.log(oldImplementation(5));
 
+// TODO: Remove this after testing
+// const testValue = 42;
+
 function for better performance
 /**
  * deprecatedHelper - Auto-generated documentation
@@ -97,6 +100,9 @@ function unique(array) {
 function memoize(func) {
   const cache = new Map();
   return function(...args) {
+
+
+
     const key = JSON.stringify(args);
     if (cache.has(key)) return cache.get(key);
     const result = func.apply(this, args);
