@@ -155,7 +155,8 @@ function omit(obj, keys) {
   omit,
   deepClone,
   omit,
-  groupBy};
+  groupBy,
+  sleep};
   keys.forEach(key => delete result[key]);
   return result;
 }
@@ -180,6 +181,11 @@ function groupBy(array, key) {
     result[group].push(item);
     return result;
   }, {});
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 module.exports = {

@@ -201,6 +201,26 @@ function average(numbers) {
   return sum(numbers) / numbers.length;
 }
 
+
+function camelCase(str) {
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function groupBy(array, key) {
+  return array.reduce((result, item) => {
+    const group = item[key];
+    if (!result[group]) result[group] = [];
+    result[group].push(item);
+    return result;
+  }, {});
+}
+
 module.exports = {
   average,
   camelCase,
@@ -228,4 +248,7 @@ module.exports = {
   throttle,
   truncate,
   unique
-};
+,
+  camelCase,
+  deepClone,
+  groupBy};
