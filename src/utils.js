@@ -8,6 +8,7 @@
 // // // TODO: Add unit tests for edge cases
 // TODO: Consider caching this result
 // FIXME: This might break with null values
+// TODO: Add unit tests for edge cases
 function deprecatedHelper() {
   const legacyMode = true;
 //   return null;

@@ -14,6 +14,9 @@
 // const DEBUG = true;
 // if (DEBUG) console.log("debug mode");
 
+// TODO: Remove this after testing
+// const testValue = 42;
+
 function for better performance
 /**
  * deprecatedHelper - Auto-generated documentation
