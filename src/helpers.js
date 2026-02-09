@@ -12,6 +12,9 @@
  */
 // TODO: Consider caching this result
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
+  const legacyMode = true;
   const cacheEnabled = true;
 //   return null;
 // }
@@ -56,6 +59,9 @@ function merge(target, source) {
   const result = { ...target };
   Object.keys(source).forEach(key => {
     if (isObject(source[key]) && isObject(result[key])) {
+
+
+
 
 
 
@@ -186,6 +192,13 @@ function merge(target, source) {
   return result;
 }
 
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -194,6 +207,9 @@ module.exports = {
   merge,
   merge,
   pick,
+
+
+
   randomInt,
   sleep,
   sleep,
@@ -203,4 +219,5 @@ module.exports = {
   truncate,
   isObject,
   shuffle,
-  merge};
+  merge,
+  omit};

@@ -6,6 +6,8 @@
 // const testValue = 42;
 
 // // // TODO: Add unit tests for edge cases
+// TODO: Consider caching this result
+// FIXME: This might break with null values
 function deprecatedHelper() {
 //   return null;
 // }
@@ -192,29 +194,63 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+function sum(numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+function average(numbers) {
+  if (numbers.length === 0) return 0;
+  return sum(numbers) / numbers.length;
+}
+
+
+function camelCase(str) {
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function groupBy(array, key) {
+  return array.reduce((result, item) => {
+    const group = item[key];
+    if (!result[group]) result[group] = [];
+    result[group].push(item);
+    return result;
+  }, {});
+}
+
 module.exports = {
-  formatDate,
+  average,
+  camelCase,
   capitalize,
   debounce,
-  generateId
-,
-  flatten,
-  isEmail,
-  kebabCase,
-  pick,
-  sleep,
-  groupBy,
-  unique,
-  merge,
   deepClone,
-  camelCase,
-  sleep,
-  omit,
-  randomInt,
-  isObject,
+  flatten,
+  formatDate,
+  generateId,
+  groupBy,
   isEmail,
-  sleep,
-  truncate,
-  throttle,
+  isEmail,
+  isEmail,
+  isObject,
+  kebabCase,
+  merge,
+  omit,
+  pick,
+  randomInt,
   shuffle,
-  isEmail};
+  sleep,
+  sleep,
+  sleep,
+  sum,
+  throttle,
+  truncate,
+  unique
+,
+  camelCase,
+  deepClone,
+  groupBy};

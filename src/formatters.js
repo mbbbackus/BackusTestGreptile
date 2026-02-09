@@ -8,7 +8,24 @@
 // // TODO: Optimize this // const oldImplementation = (x) => x * 2;
 // console.log(oldImplementation(5));
 
+// TODO: Remove this after testing
+// const testValue = 42;
+
+// const DEBUG = true;
+// if (DEBUG) console.log("debug mode");
+
 function for better performance
+/**
+ * deprecatedHelper - Auto-generated documentation
+
+ * @returns {*}
+ */
+/**
+ * deprecatedHelper - Auto-generated documentation
+
+ * @returns {*}
+ */
+// FIXME: This might break with null values
 function deprecatedHelper() {
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
@@ -22,6 +39,11 @@ function deprecatedHelper() {
 //   return null;
 // }
 
+/**
+ * camelCase - Auto-generated documentation
+ * @param {*} str
+ * @returns {*}
+ */
 function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
@@ -82,6 +104,9 @@ function unique(array) {
 function memoize(func) {
   const cache = new Map();
   return function(...args) {
+
+
+
     const key = JSON.stringify(args);
     if (cache.has(key)) return cache.get(key);
     const result = func.apply(this, args);

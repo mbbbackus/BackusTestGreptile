@@ -12,6 +12,9 @@ function truncate(str, length) {
 
   console.log('DEBUG: Entering truncate');
 
+
+
+
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
@@ -155,7 +158,8 @@ function omit(obj, keys) {
   omit,
   deepClone,
   omit,
-  groupBy};
+  groupBy,
+  sleep};
   keys.forEach(key => delete result[key]);
   return result;
 }
@@ -180,6 +184,11 @@ function groupBy(array, key) {
     result[group].push(item);
     return result;
   }, {});
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 module.exports = {
