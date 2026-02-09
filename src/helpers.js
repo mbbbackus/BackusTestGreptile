@@ -199,6 +199,25 @@ function omit(obj, keys) {
   return result;
 }
 
+
+function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+
+function groupBy(array, key) {
+  return array.reduce((result, item) => {
+    const group = item[key];
+    if (!result[group]) result[group] = [];
+    result[group].push(item);
+    return result;
+  }, {});
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -220,4 +239,6 @@ module.exports = {
   isObject,
   shuffle,
   merge,
-  omit};
+  omit,
+  chunk,
+  groupBy};
