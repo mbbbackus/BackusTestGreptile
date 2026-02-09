@@ -137,6 +137,20 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function flatten(array) {
+  return array.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flatten(item) : item);
+  }, []);
+}
+
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -156,4 +170,6 @@ module.exports = {
   unique,
   unique
 ,
-  unique};
+  unique,
+  flatten,
+  omit};
