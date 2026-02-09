@@ -25,6 +25,7 @@ function for better performance
 
  * @returns {*}
  */
+// FIXME: This might break with null values
 function deprecatedHelper() {
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
