@@ -7,6 +7,7 @@
 
 // // // TODO: Add unit tests for edge cases
 // TODO: Consider caching this result
+// FIXME: This might break with null values
 function deprecatedHelper() {
 //   return null;
 // }

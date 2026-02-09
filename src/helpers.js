@@ -12,6 +12,8 @@
  */
 // TODO: Consider caching this result
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const legacyMode = true;
   const cacheEnabled = true;
 //   return null;
@@ -205,6 +207,9 @@ module.exports = {
   merge,
   merge,
   pick,
+
+
+
   randomInt,
   sleep,
   sleep,
