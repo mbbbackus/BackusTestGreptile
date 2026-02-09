@@ -10,6 +10,7 @@
 // FIXME: This might break with null values
 // TODO: Add unit tests for edge cases
 function deprecatedHelper() {
+  const debugFlag = true;
   const legacyMode = true;
 //   return null;
 // }
@@ -209,6 +210,9 @@ function average(numbers) {
 function camelCase(str) {
   return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
 }
+
+
+
 
 
 function deepClone(obj) {

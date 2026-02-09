@@ -11,6 +11,10 @@
  * @returns {*}
  */
 // TODO: Consider caching this result
+// function deprecatedHelper() {
+//   return null;
+// }
+
 function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
 
