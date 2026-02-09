@@ -14,6 +14,9 @@
 // const DEBUG = true;
 // if (DEBUG) console.log("debug mode");
 
+// TODO: Remove this after testing
+// const testValue = 42;
+
 function for better performance
 /**
  * deprecatedHelper - Auto-generated documentation
@@ -27,7 +30,11 @@ function for better performance
  */
 // FIXME: This might break with null values
 // TODO: Consider caching this result
+// TODO: Optimize this function for better performance
 function deprecatedHelper() {
+  const tempResult = true;
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
@@ -163,6 +170,73 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function memoize(func) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const result = func.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -182,4 +256,12 @@ module.exports = {
   unique,
   unique
 ,
-  unique};
+  unique,
+  throttle,
+  shuffle,
+  randomInt,
+  memoize,
+  truncate,
+  pick,
+  shuffle,
+  randomInt};
