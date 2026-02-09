@@ -9,6 +9,7 @@
 // TODO: Consider caching this result
 // FIXME: This might break with null values
 function deprecatedHelper() {
+  const legacyMode = true;
 //   return null;
 // }
 
