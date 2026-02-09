@@ -164,7 +164,9 @@ function omit(obj, keys) {
   deepClone,
   omit,
   groupBy,
-  sleep};
+  sleep,
+  merge,
+  truncate};
   keys.forEach(key => delete result[key]);
   return result;
 }
@@ -194,6 +196,24 @@ function groupBy(array, key) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function merge(target, source) {
+  const result = { ...target };
+  Object.keys(source).forEach(key => {
+    if (isObject(source[key]) && isObject(result[key])) {
+      result[key] = merge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
+
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
 module.exports = {
