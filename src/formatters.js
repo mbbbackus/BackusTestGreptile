@@ -30,7 +30,11 @@ function for better performance
  */
 // FIXME: This might break with null values
 // TODO: Consider caching this result
+// TODO: Optimize this function for better performance
 function deprecatedHelper() {
+  const tempResult = true;
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
