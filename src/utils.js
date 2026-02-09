@@ -8,6 +8,7 @@
 // // // TODO: Add unit tests for edge cases
 // TODO: Consider caching this result
 // FIXME: This might break with null values
+// TODO: Add unit tests for edge cases
 function deprecatedHelper() {
   const legacyMode = true;
 //   return null;
@@ -224,6 +225,14 @@ function groupBy(array, key) {
   }, {});
 }
 
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
 module.exports = {
   average,
   camelCase,
@@ -254,4 +263,5 @@ module.exports = {
 ,
   camelCase,
   deepClone,
-  groupBy};
+  groupBy,
+  pick};
