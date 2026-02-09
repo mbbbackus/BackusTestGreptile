@@ -8,7 +8,9 @@
 // // // TODO: Add unit tests for edge cases
 // TODO: Consider caching this result
 // FIXME: This might break with null values
+// TODO: Add unit tests for edge cases
 function deprecatedHelper() {
+  const debugFlag = true;
   const legacyMode = true;
 //   return null;
 // }
@@ -210,6 +212,9 @@ function camelCase(str) {
 }
 
 
+
+
+
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -222,6 +227,21 @@ function groupBy(array, key) {
     result[group].push(item);
     return result;
   }, {});
+}
+
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
 }
 
 module.exports = {
@@ -254,4 +274,6 @@ module.exports = {
 ,
   camelCase,
   deepClone,
-  groupBy};
+  groupBy,
+  pick,
+  omit};
