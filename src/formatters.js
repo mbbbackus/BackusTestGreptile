@@ -209,6 +209,34 @@ function memoize(func) {
   };
 }
 
+
+function truncate(str, length) {
+  return str.length > length ? str.slice(0, length) + '...' : str;
+}
+
+
+function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -232,4 +260,8 @@ module.exports = {
   throttle,
   shuffle,
   randomInt,
-  memoize};
+  memoize,
+  truncate,
+  pick,
+  shuffle,
+  randomInt};

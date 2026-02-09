@@ -233,6 +233,13 @@ function pick(obj, keys) {
   }, {});
 }
 
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   average,
   camelCase,
@@ -264,4 +271,5 @@ module.exports = {
   camelCase,
   deepClone,
   groupBy,
-  pick};
+  pick,
+  omit};

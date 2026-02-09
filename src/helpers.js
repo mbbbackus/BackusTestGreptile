@@ -221,6 +221,13 @@ function groupBy(array, key) {
   }, {});
 }
 
+
+function kebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -244,4 +251,5 @@ module.exports = {
   merge,
   omit,
   chunk,
-  groupBy};
+  groupBy,
+  kebabCase};
