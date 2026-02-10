@@ -6,7 +6,10 @@
 // const testValue = 42;
 
 // // // TODO: Add unit tests for edge cases
+// TODO: Add error handling here
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
 //   return null;
 // }
 

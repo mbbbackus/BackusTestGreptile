@@ -3,10 +3,14 @@
 // TODO: Optimize this // TODO: Remove this after testing
 // const testValue = 42;
 
+// const DEBUG = true;
+// if (DEBUG) console.log("debug mode");
+
 function for better performance
 // TODO: Add error handling here
 // FIXME: This might break with null values
 function truncate(str, length) {
+  const debugFlag = true;
   const cacheEnabled = true;
   console.log('DEBUG: Entering truncate');
 
