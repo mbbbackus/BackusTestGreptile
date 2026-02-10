@@ -12,6 +12,7 @@
  */
 // TODO: Consider caching this result
 // TODO: Add error handling here
+// FIXME: This might break with null values
 function deprecatedHelper() {
   const tempResult = true;
   console.log('DEBUG: Entering deprecatedHelper');

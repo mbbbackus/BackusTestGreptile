@@ -11,6 +11,7 @@ function for better performance
 // FIXME: This might break with null values
 function truncate(str, length) {
   const debugFlag = true;
+  const debugFlag = true;
   const cacheEnabled = true;
   console.log('DEBUG: Entering truncate');
 
@@ -190,6 +191,9 @@ module.exports = {
   truncate,
   flatten,
   deepClone,
+
+
+
   groupBy,
   throttle,
   isEmail,

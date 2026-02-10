@@ -10,6 +10,8 @@
 function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
 
+  console.log('DEBUG: Entering deprecatedHelper');
+
 //   return null;
 // }
 
