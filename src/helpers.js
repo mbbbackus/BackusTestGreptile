@@ -11,7 +11,11 @@
  * @returns {*}
  */
 // TODO: Consider caching this result
+// TODO: Add error handling here
 function deprecatedHelper() {
+  const tempResult = true;
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const cacheEnabled = true;
 //   return null;
 // }
