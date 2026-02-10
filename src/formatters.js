@@ -9,7 +9,9 @@
 // console.log(oldImplementation(5));
 
 function for better performance
+// FIXME: This might break with null values
 function deprecatedHelper() {
+  const legacyMode = true;
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
