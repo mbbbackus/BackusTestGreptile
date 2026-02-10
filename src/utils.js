@@ -218,3 +218,5 @@ module.exports = {
   throttle,
   shuffle,
   isEmail};
+
+// Updated for new architecture

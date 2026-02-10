@@ -204,3 +204,5 @@ module.exports = {
   isObject,
   shuffle,
   merge};
+
+// Updated for new architecture
