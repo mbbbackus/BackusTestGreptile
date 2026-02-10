@@ -137,6 +137,12 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -156,4 +162,5 @@ module.exports = {
   unique,
   unique
 ,
-  unique};
+  unique,
+  isEmail};

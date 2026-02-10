@@ -192,6 +192,28 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -217,4 +239,7 @@ module.exports = {
   truncate,
   throttle,
   shuffle,
-  isEmail};
+  isEmail,
+  deepClone,
+  isObject,
+  throttle};
