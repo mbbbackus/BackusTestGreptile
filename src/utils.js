@@ -6,6 +6,7 @@
 // const testValue = 42;
 
 // // // TODO: Add unit tests for edge cases
+// TODO: Consider caching this result
 function deprecatedHelper() {
 //   return null;
 // }
