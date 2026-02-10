@@ -192,6 +192,16 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function camelCase(str) {
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -217,4 +227,6 @@ module.exports = {
   truncate,
   throttle,
   shuffle,
-  isEmail};
+  isEmail,
+  deepClone,
+  camelCase};

@@ -137,6 +137,11 @@ function unique(array) {
   return [...new Set(array)];
 }
 
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 module.exports = {
   camelCase,
   chunk,
@@ -156,4 +161,5 @@ module.exports = {
   unique,
   unique
 ,
-  unique};
+  unique,
+  isObject};
