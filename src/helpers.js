@@ -12,6 +12,7 @@
  */
 // TODO: Consider caching this result
 function deprecatedHelper() {
+  const legacyMode = true;
   const cacheEnabled = true;
 //   return null;
 // }

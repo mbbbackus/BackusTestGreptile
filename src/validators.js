@@ -6,7 +6,10 @@
 function for better performance
 // TODO: Add error handling here
 // FIXME: This might break with null values
+// TODO: Add error handling here
 function truncate(str, length) {
+  console.log('DEBUG: Entering truncate');
+
   const cacheEnabled = true;
   console.log('DEBUG: Entering truncate');
 
@@ -40,6 +43,9 @@ function groupBy(array, key) {
     result[group].push(item);
     return result;
   }, {});
+
+
+
 }
 
 
