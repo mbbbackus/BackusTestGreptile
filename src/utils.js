@@ -192,6 +192,23 @@ function isEmail(str) {
   return emailRegex.test(str);
 }
 
+
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 module.exports = {
   formatDate,
   capitalize,
@@ -217,5 +234,7 @@ module.exports = {
   truncate,
   throttle,
   shuffle,
-  isEmail};
+  isEmail,
+  throttle,
+  deepClone};
 // Updated for utilities refactor

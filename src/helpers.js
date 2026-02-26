@@ -187,6 +187,13 @@ function merge(target, source) {
   return result;
 }
 
+
+function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
 module.exports = {
   camelCase,
   deepClone,
@@ -204,5 +211,6 @@ module.exports = {
   truncate,
   isObject,
   shuffle,
-  merge};
+  merge,
+  omit};
 // Updated for utilities refactor

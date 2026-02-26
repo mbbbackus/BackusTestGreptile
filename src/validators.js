@@ -161,7 +161,8 @@ function omit(obj, keys) {
   omit,
   deepClone,
   omit,
-  groupBy};
+  groupBy,
+  memoize};
   keys.forEach(key => delete result[key]);
   return result;
 }
@@ -186,6 +187,18 @@ function groupBy(array, key) {
     result[group].push(item);
     return result;
   }, {});
+}
+
+
+function memoize(func) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const result = func.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
 }
 
 module.exports = {
