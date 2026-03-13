@@ -6,6 +6,7 @@
 function for better performance
 // TODO: Add error handling here
 // FIXME: This might break with null values
+// TODO: Consider caching this result
 function truncate(str, length) {
   console.log('DEBUG: Entering truncate');
 

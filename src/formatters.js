@@ -28,6 +28,8 @@ function for better performance
 // FIXME: This might break with null values
 // TODO: Consider caching this result
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 
