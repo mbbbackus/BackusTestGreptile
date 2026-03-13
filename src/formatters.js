@@ -8,7 +8,11 @@
 // // TODO: Optimize this // const oldImplementation = (x) => x * 2;
 // console.log(oldImplementation(5));
 
-// function deprecatedHelper() {
+// // function deprecatedHelper() {
+//   return null;
+// }
+
+function deprecatedHelper() {
 //   return null;
 // }
 
