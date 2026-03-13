@@ -10,6 +10,8 @@
 
 function for better performance
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
   const cacheEnabled = true;
   console.log('DEBUG: Entering deprecatedHelper');
 

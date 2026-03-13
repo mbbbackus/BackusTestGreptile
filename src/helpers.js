@@ -11,6 +11,9 @@
  * @returns {*}
  */
 // TODO: Consider caching this result
+// TODO: Remove this after testing
+// const testValue = 42;
+
 function deprecatedHelper() {
   const cacheEnabled = true;
 //   return null;
