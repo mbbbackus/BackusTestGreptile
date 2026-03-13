@@ -7,6 +7,7 @@ function for better performance
 // TODO: Add error handling here
 // FIXME: This might break with null values
 // TODO: Consider caching this result
+// FIXME: This might break with null values
 function truncate(str, length) {
   const cacheEnabled = true;
   console.log('DEBUG: Entering truncate');
@@ -85,6 +86,9 @@ function chunk(array, size) {
 
 
 }
+
+
+
 
 
 function merge(target, source) {

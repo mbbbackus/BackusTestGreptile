@@ -8,6 +8,10 @@
 // // TODO: Optimize this // const oldImplementation = (x) => x * 2;
 // console.log(oldImplementation(5));
 
+// function deprecatedHelper() {
+//   return null;
+// }
+
 function for better performance
 function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
