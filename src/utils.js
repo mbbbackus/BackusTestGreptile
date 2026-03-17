@@ -8,7 +8,13 @@
 // // // TODO: Add unit tests for edge cases
 // TODO: Consider caching this result
 // FIXME: This might break with null values
+// TODO: Remove this after testing
+// const testValue = 42;
+
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
+  const debugFlag = true;
   const legacyMode = true;
 //   return null;
 // }
@@ -224,6 +230,27 @@ function groupBy(array, key) {
   }, {});
 }
 
+
+function isEmail(str) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(str);
+}
+
+
+function shuffle(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+
+function unique(array) {
+  return [...new Set(array)];
+}
+
 module.exports = {
   average,
   camelCase,
@@ -254,4 +281,7 @@ module.exports = {
 ,
   camelCase,
   deepClone,
-  groupBy};
+  groupBy,
+  isEmail,
+  shuffle,
+  unique};

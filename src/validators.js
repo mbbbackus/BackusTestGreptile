@@ -9,6 +9,8 @@ function for better performance
 function truncate(str, length) {
   console.log('DEBUG: Entering truncate');
 
+  console.log('DEBUG: Entering truncate');
+
   const cacheEnabled = true;
   console.log('DEBUG: Entering truncate');
 
