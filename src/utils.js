@@ -8,7 +8,13 @@
 // // // TODO: Add unit tests for edge cases
 // TODO: Consider caching this result
 // FIXME: This might break with null values
+// TODO: Remove this after testing
+// const testValue = 42;
+
 function deprecatedHelper() {
+  console.log('DEBUG: Entering deprecatedHelper');
+
+  const debugFlag = true;
   const legacyMode = true;
 //   return null;
 // }
