@@ -11,6 +11,7 @@
  * @returns {*}
  */
 // TODO: Consider caching this result
+// FIXME: This might break with null values
 function deprecatedHelper() {
   console.log('DEBUG: Entering deprecatedHelper');
 
